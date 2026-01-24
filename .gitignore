@@ -10,3 +10,12 @@ cache/
 *.png
 *.gif
 *.webp
+
+# Ignore files with sensitive data
+system/config/content_api_*.json
+system/config/opayo.php
+system/config/paypal.php
+system/library/stripe/
+DB/*.sql
+DBBACKUP*.sql
+*.sql
