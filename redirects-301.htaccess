@@ -1,0 +1,187 @@
+# ============================================
+# 301 PERMANENT REDIRECTS - DyeCraftDirect
+# ============================================
+# ONE-HOP ONLY - Direct mappings from CSV
+# Query strings preserved via QSA flag
+# Generated from canonicals_nonindexable_canonical.csv
+# ============================================
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Preserve Query String Append
+RewriteFlag QSA
+
+# ============================================
+# MINI-CERAMIC-MUG-WRAP REDIRECTS
+# ============================================
+
+# heat-presses/accessories-for-heat-presses/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/heat-presses/accessories-for-heat-presses/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# sublimation-blanks/sublimation-mugs-and-drinkware/drinkware-accessories/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/sublimation-mugs-and-drinkware/drinkware-accessories/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# heat-presses/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/heat-presses/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# heat-presses/accessories-for-heat-presses/sublimation-wraps/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/heat-presses/accessories-for-heat-presses/sublimation-wraps/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# sublimation-mugs-and-drinkware/drinkware-accessories/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/sublimation-mugs-and-drinkware/drinkware-accessories/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# drinkware-accessories/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/drinkware-accessories/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# accessories-for-heat-presses/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/accessories-for-heat-presses/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# sublimation-wraps/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/sublimation-wraps/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# sublimation-blanks/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7/?$
+RewriteRule ^(.*)$ /mini-ceramic-mug-wrap-3oz-klbj-3mk-c-7 [R=301,L,QSA]
+
+# ============================================
+# 11OZ-SPARKLING-PINK-MUG REDIRECTS
+# ============================================
+
+# special-mugs/11oz-sparkling-pink-mug
+RewriteCond %{REQUEST_URI} ^/special-mugs/11oz-sparkling-pink-mug/?$
+RewriteRule ^(.*)$ /11oz-sparkling-pink-mug [R=301,L,QSA]
+
+# sublimation-blanks/sublimation-mugs-and-drinkware/special-mugs/11oz-sparkling-pink-mug
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/sublimation-mugs-and-drinkware/special-mugs/11oz-sparkling-pink-mug/?$
+RewriteRule ^(.*)$ /11oz-sparkling-pink-mug [R=301,L,QSA]
+
+# sublimation-mugs-and-drinkware/special-mugs/11oz-sparkling-pink-mug
+RewriteCond %{REQUEST_URI} ^/sublimation-mugs-and-drinkware/special-mugs/11oz-sparkling-pink-mug/?$
+RewriteRule ^(.*)$ /11oz-sparkling-pink-mug [R=301,L,QSA]
+
+# sublimation-mugs-and-drinkware/11oz-sparkling-pink-mug
+RewriteCond %{REQUEST_URI} ^/sublimation-mugs-and-drinkware/11oz-sparkling-pink-mug/?$
+RewriteRule ^(.*)$ /11oz-sparkling-pink-mug [R=301,L,QSA]
+
+# sublimation-blanks/sublimation-mugs-and-drinkware/11oz-sparkling-pink-mug
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/sublimation-mugs-and-drinkware/11oz-sparkling-pink-mug/?$
+RewriteRule ^(.*)$ /11oz-sparkling-pink-mug [R=301,L,QSA]
+
+# sublimation-blanks/11oz-sparkling-pink-mug
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/11oz-sparkling-pink-mug/?$
+RewriteRule ^(.*)$ /11oz-sparkling-pink-mug [R=301,L,QSA]
+
+# ============================================
+# HEART-BRAIDED-KEY-CHAIN-RED REDIRECTS
+# ============================================
+
+# sublimation-blanks/sublimation-keychains/heart-braided-key-chain-red-ya128h-r-floor-9
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/sublimation-keychains/heart-braided-key-chain-red-ya128h-r-floor-9/?$
+RewriteRule ^(.*)$ /heart-braided-key-chain-red-ya128h-r-floor-9 [R=301,L,QSA]
+
+# heart-braided-key-chain-red-ya128h-r-floor-9?manufacturer_id=15&page=2
+RewriteCond %{REQUEST_URI} ^/heart-braided-key-chain-red-ya128h-r-floor-9/?$
+RewriteCond %{QUERY_STRING} manufacturer_id=15&page=2
+RewriteRule ^(.*)$ /heart-braided-key-chain-red-ya128h-r-floor-9 [R=301,L,QSA]
+
+# sublimation-keychains/heart-braided-key-chain-red-ya128h-r-floor-9
+RewriteCond %{REQUEST_URI} ^/sublimation-keychains/heart-braided-key-chain-red-ya128h-r-floor-9/?$
+RewriteRule ^(.*)$ /heart-braided-key-chain-red-ya128h-r-floor-9 [R=301,L,QSA]
+
+# sublimation-blanks/heart-braided-key-chain-red-ya128h-r-floor-9
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/heart-braided-key-chain-red-ya128h-r-floor-9/?$
+RewriteRule ^(.*)$ /heart-braided-key-chain-red-ya128h-r-floor-9 [R=301,L,QSA]
+
+# ============================================
+# PU-OVAL-KEY-CHAIN-BLACK REDIRECTS
+# ============================================
+
+# sublimation-blanks/sublimation-keychains/pu-oval-key-chain-black-ya108
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/sublimation-keychains/pu-oval-key-chain-black-ya108/?$
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# sublimation-blanks/sublimation-keychains/sublimation-pu-leather-keychains/pu-oval-key-chain-black-ya108
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/sublimation-keychains/sublimation-pu-leather-keychains/pu-oval-key-chain-black-ya108/?$
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# pu-oval-key-chain-black-ya108?manufacturer_id=15&page=3
+RewriteCond %{REQUEST_URI} ^/pu-oval-key-chain-black-ya108/?$
+RewriteCond %{QUERY_STRING} manufacturer_id=15&page=3
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# sublimation-pu-leather-keychains/pu-oval-key-chain-black-ya108
+RewriteCond %{REQUEST_URI} ^/sublimation-pu-leather-keychains/pu-oval-key-chain-black-ya108/?$
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# sublimation-keychains/pu-oval-key-chain-black-ya108
+RewriteCond %{REQUEST_URI} ^/sublimation-keychains/pu-oval-key-chain-black-ya108/?$
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# sublimation-keychains/sublimation-pu-leather-keychains/pu-oval-key-chain-black-ya108
+RewriteCond %{REQUEST_URI} ^/sublimation-keychains/sublimation-pu-leather-keychains/pu-oval-key-chain-black-ya108/?$
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# sublimation-blanks/pu-oval-key-chain-black-ya108
+RewriteCond %{REQUEST_URI} ^/sublimation-blanks/pu-oval-key-chain-black-ya108/?$
+RewriteRule ^(.*)$ /pu-oval-key-chain-black-ya108 [R=301,L,QSA]
+
+# ============================================
+# PEDESTAL-HOTRONIX-AIR-FUSION-HEAT-PRESS REDIRECTS
+# ============================================
+
+# heat-presses/flat-heat-presses/stahls-heat-press/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/heat-presses/flat-heat-presses/stahls-heat-press/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# stahls-heat-press/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/stahls-heat-press/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# heat-presses/flat-heat-presses/stahls-heat-press/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/heat-presses/flat-heat-presses/stahls-heat-press/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# heat-presses/flat-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/heat-presses/flat-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# flat-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/flat-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# flat-heat-presses/stahls-heat-press/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/flat-heat-presses/stahls-heat-press/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# flat-heat-presses/stahls-heat-press/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/flat-heat-presses/stahls-heat-press/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# stahls/pedestal-hotronix-air-fusion-heat-press-16x20?page=2
+RewriteCond %{REQUEST_URI} ^/stahls/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteCond %{QUERY_STRING} page=2
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+# stahls-heat-press/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20
+RewriteCond %{REQUEST_URI} ^/stahls-heat-press/air-fusion-heat-presses/pedestal-hotronix-air-fusion-heat-press-16x20/?$
+RewriteRule ^(.*)$ /pedestal-hotronix-air-fusion-heat-press-16x20 [R=301,L,QSA]
+
+</IfModule>
