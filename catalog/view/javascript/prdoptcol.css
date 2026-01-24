@@ -1,0 +1,25 @@
+.prdoptcol_radio_prdpgdiv{display:inline-flex;margin:2px;}
+.prdoptcol_atprd{cursor:pointer;display:inline-block;border:1px solid #ccc;}
+.prdoptcol_atprd.circle{border-radius:50%}
+.prdoptcol_atprd.act{border:2px solid #000}
+span.prdoptcol_atprd.square { padding: 5px; }
+.prdoptcol_radio_prdpgdiv input{display:none;}
+b.prdoptcol_setval{display:block;margin-left:10px}
+.prdoptcol_btnrst{cursor:pointer}
+.prdoptcol_hideaddnl{display:none}
+
+/* Grid css*/
+.prdoptcol_radio_griddiv{display:inline-flex;margin:1px;}
+.prdoptcol_atgrid{cursor:pointer;display:inline-block;border:1px solid #ccc;}
+.prdoptcol_atgrid.circle{border-radius:50%}
+.prdoptcol_atgrid.act{border:2px solid #000}
+span.prdoptcol_atgrid.square { padding: 3px; }
+.prdoptcol_radio_griddiv input{display:none}
+b.prdoptcol_gridsetval{display:block;margin-left:10px}
+.prdoptcol_gridbtnrst{cursor:pointer}
+.prdoptcol_hide_addimg{display:none !important;}
+
+.product-thumb .form-group, .product-wrapper .form-group{ display: block !important;}
+.product-thumb .form-group label.control-label, .product-wrapper .form-group label.control-label{ width: 100% !important; max-width: 100% !important;}
+
+.prdoptcol_gridbtnrst, .prdoptcol_prdpg_btnrst{cursor:pointer;}

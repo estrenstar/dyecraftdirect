@@ -1,0 +1,29 @@
+
+<table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;">   
+	<tr style="border-collapse:collapse;"> 
+		<td align="center" style="padding:0;Margin:0;padding-bottom:5px;padding-top:10px;"><a target="_blank" href="{checkout}" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:tahoma, verdana, segoe, sans-serif;font-size:14px;text-decoration:underline;color:#F09870;"><img class="adapt-img" src="{store_url}image/catalog/hb_cart/7131501682792363.png" alt="You left something behind" width="385" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"></a></td> 
+	</tr> 
+</table>
+
+<br>
+
+<p align="center" style="text-align: center; Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:tahoma, verdana, segoe, sans-serif;line-height:21px;color:#333333;">{cart_items}</p>
+
+<br>
+
+<p align="center" style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:tahoma, verdana, segoe, sans-serif;line-height:21px;color:#333333;"><span style="font-family:tahoma, verdana, segoe, sans-serif;"><span style="font-size:24px;line-height:36px;">E S P E C I A L L Y &nbsp; F O R &nbsp; Y O U</span></span><span style="font-size:24px;"><span style="font-family:tahoma, geneva, sans-serif;"><span style="line-height:150%;"></span></span></span><br></p>
+
+<p align="center" style="text-align: center; Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:tahoma, verdana, segoe, sans-serif;line-height:21px;color:#333333;">If you are not sure about buying these products the 15% will convince you<br></p>
+
+<br>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse!important;border:0px">
+    <tbody>
+        <tr>
+            <td align="center" valign="middle" bgcolor="#{color3}" style="margin:0;height:40px;width:213px"><a
+                    href="{checkout}" style="background-color:#{color3}; margin:0;text-decoration:none;text-transform:uppercase;font-family:'Roboto',Arial,sans-serif;font-weight:500;font-size:13px;color:#ffffff;display:inline-block"
+                    target="_blank"> <span style="display:block;width:213px;line-height:40px">Complete
+                        Checkout</span> </a> <u></u> </td>
+        </tr>
+    </tbody>
+</table>

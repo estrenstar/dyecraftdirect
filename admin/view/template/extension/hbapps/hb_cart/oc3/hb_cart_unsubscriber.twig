@@ -1,0 +1,33 @@
+<div class="table-responsive">
+	<table class="table table-bordered table-hover">
+	<thead>
+		<tr>
+		<td class="text-center">{{ column_id }}</td>
+		<td class="text-left col-sm-6">{{ column_email }}</td>
+		<td class="text-left">{{ column_ip }}</td>
+		<td class="text-right">{{ column_date_added }}</td>
+		<td class="text-center">{{ column_action }}</td>
+		</tr>
+	</thead>
+	<tbody>
+		{% if records %}
+		{% for record in records %}
+		<tr>
+			<td class="text-center">{{ record.id }}</td>
+			<td class="text-left">{{ record.email }}</td>
+			<td class="text-left">{{ record.ip }}</td>
+			<td class="text-right">{{ record.date_added }}</td>
+			<td class="text-center"><a class="btn btn-sm btn-danger" onclick="deleteUnsubscriber({{ record.id }});"><i class="fa fa-trash"></i> Delete</a></td>
+		</tr>
+		{% endfor %}
+		{% else %} 
+			<tr><td class="text-center" colspan="5">No Records Found</td></tr>
+		{% endif %}				
+	</tbody>
+	</table>
+</div>
+
+<div class="row">
+	<div class="col-sm-6 text-left">{{ pagination }}</div>
+	<div class="col-sm-6 text-right">{{ results }}</div>
+</div>

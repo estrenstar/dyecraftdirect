@@ -1,0 +1,17 @@
+{% if reviews %}
+<h3 style="Margin:0;line-height:29px;mso-line-height-rule:exactly;font-size:18px;font-style:normal;font-weight:normal;color:#888B8D;text-align: center; margin-bottom:20px;">{{ text_reviews }}</h3>
+<table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+<tbody>
+ {% for review in reviews %}
+ <tr style="margin-bottom: 20px;">
+	<td style="font-size: 12px;	text-align: center; padding: 7px; max-width:56px" valign="top"><img src="{{ https_server }}image/catalog/hb_cart/44301521732133350.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"></td>
+	<td style="font-size: 12px; text-align: left; padding: 7px;" valign="top">
+		<img src="{{ https_server }}image/catalog/hb_cart/stars-{{ review.rating }}.png" alt style="display:block;border:0; margin-bottom:5px; outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;">
+		<span style="font-size: 12px; text-align: left; line-height: 18px;">{{ review.text }}</span><br />
+		<span style="font-size: 12px; text-align: left; color:#4285F4; line-height: 25px;">- {{ review.author }}</span><br />
+	</td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+{% endif %}

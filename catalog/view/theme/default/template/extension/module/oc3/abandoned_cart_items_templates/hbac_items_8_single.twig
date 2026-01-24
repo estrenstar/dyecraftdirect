@@ -1,0 +1,28 @@
+<table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+	<tbody>
+	 <tr>
+		<td style="font-size: 12px; text-align: center; padding: 7px;">{% if product.image %}
+		 <a href="{{ product.href }}"><img src="{{ product.image }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" /></a>
+		 {% endif %}</td>	
+	 </tr>
+	
+	 <tr>
+		<td>
+		<table style="border-collapse: collapse; margin-bottom: 20px; " align="center">
+			<tr align="center">
+				<td style="font-size: 20px;	text-align: center; padding: 7px;"><a href="{{ product.href }}">{{ product.name }}</a> ({{ product.model }})
+					{% if product.option %}
+					{% for option in product['option'] %}
+					<br />
+					<small>{{ option.name }}: {{ option.value }}</small>
+					{% endfor %}
+					{% endif %}
+					<br>
+					<p style="text-align:center; color:#F09870; font-size:18px;">{{ product.price }}</p>
+				 </td>
+			</tr>
+		</table>
+		</td>
+	 </tr>
+	 </tbody>
+	 </table>

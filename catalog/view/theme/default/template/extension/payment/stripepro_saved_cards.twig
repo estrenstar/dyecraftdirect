@@ -1,0 +1,56 @@
+{{ header }}
+<div id="account-address" class="container">
+	<ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endfor %}
+	</ul>
+	{% if success %}
+	<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+	{% endif %}
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+		{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+		{% set class = 'col-sm-9' %}
+		{% else %}
+		{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<h2>{{ text_saved_cards }}</h2>
+			{% if cards %}
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover">
+					<tr>
+						<th>{{ text_brand }}</th>
+						<th>{{ text_card_number }}</th>
+						<th>{{ text_card_expiry }}</th>
+						<th class="text-center">{{ text_action }}</th>
+					</tr>
+					{% for card in cards %}
+					<tr>
+						<td>{{ card.brand }}</td>
+						<td>**** **** **** {{ card.last4 }}</td>
+						<td>{{ card.exp_month }}/{{ card.exp_year }}</td>
+						<td class="text-center"><a href="{{ card.delete }}" onclick="return confirm('Are you sure?');" class="btn btn-danger">{{ button_delete }}</a></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+			{% else %}
+			<p>{{ text_no_saved_cards }}</p>
+			{% endif %}
+			<div class="buttons clearfix">
+				<div class="pull-left"><a href="{{ back }}" class="btn btn-default">{{ button_back }}</a></div>
+			</div>
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

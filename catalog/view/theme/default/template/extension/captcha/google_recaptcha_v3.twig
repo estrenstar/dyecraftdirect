@@ -1,0 +1,65 @@
+<?php
+//==============================================================================
+// Google reCAPTCHA v3 v2024-10-09
+// 
+// Author: Clear Thinking, LLC
+// E-mail: johnathan@getclearthinking.com
+// Website: http://www.getclearthinking.com
+// 
+// All code within this file is copyright Clear Thinking, LLC.
+// You may not copy or reuse code within this file without written permission.
+//==============================================================================
+?>
+
+<div id="google-recaptcha-v3-<?php echo $id; ?>"></div>
+
+<script type="application/javascript">
+	$.getScript('https://www.google.com/recaptcha/api.js?render=<?php echo $settings['site_key']; ?>', function(data) {
+		grecaptcha.ready(function(){
+			recaptcha<?php echo $id; ?>();
+		});
+		
+		$(':input').blur(function(){
+			recaptcha<?php echo $id; ?>();
+		});
+	});
+	
+	var useV2_<?php echo $id; ?> = false;
+	
+	function recaptcha<?php echo $id; ?>() {
+		if (useV2_<?php echo $id; ?>) return;
+		
+		grecaptcha.execute('<?php echo $settings['site_key']; ?>', {action: '<?php echo $route; ?>'}).then(function(token) {
+			$.ajax({
+				type: 'POST',
+				url: 'index.php?route=<?php echo $settings['extension_route']; ?>/checkToken',
+				data: {id: <?php echo $id; ?>, recaptcha_token: token},
+				success: function(response) {
+					response = response.trim();
+					if (response.indexOf('<fieldset') == 0) {
+						useV2_<?php echo $id; ?> = true;
+					}
+					$('#google-recaptcha-v2-<?php echo $id; ?>').remove();
+					$('#google-recaptcha-v3-<?php echo $id; ?>').before(response);
+				},
+				error: function(xhr, status, error) {
+					console.log(xhr.responseText ? xhr.responseText : error);
+				}
+			});
+		});
+	}
+</script>
+
+<?php if ($checkout_page) { ?>
+	<div>
+		<div id="input-payment-captcha"></div>
+	</div>
+<?php } ?>
+
+<?php if ($error_captcha) { ?>
+	<div class="alert alert-danger"><?php echo $error_captcha; ?></div>
+<?php } ?>
+
+<?php if (version_compare(VERSION, '4.0', '>=')) { ?>
+	<div id="error-captcha" class="invalid-feedback" style="margin-top: 40px"></div>
+<?php } ?>

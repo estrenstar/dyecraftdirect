@@ -1,0 +1,84 @@
+<style>
+    div.gmt_debug_bar {
+        position: fixed;
+        left: 0px;
+        bottom: 0px;
+        height: 350px;
+        width: 100%;
+        z-index: 9999999998;
+        background: #040059;
+    }
+
+    div.gmt_debug_bar .gmt_debug_container {
+        overflow-y: scroll;
+        position: relative;
+        float: left;
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        padding: 0px 35px 90px 35px;
+    }
+    div.gmt_debug_bar h2,
+    div.gmt_debug_bar .gmt_debug_container h3 {
+        color: #fff;
+        padding: 0px;
+        margin: 0px;
+    }
+    div.gmt_debug_bar h2 {
+        margin: 20px 0px;
+    }
+    div.gmt_debug_bar .gmt_debug_container h3 {
+        margin-bottom: 15px;
+    }
+    div.gmt_debug_bar .gmt_toggle {
+        position: absolute;
+        right: 30px;
+        top: 15px;
+        font-size: 25px;
+        color: #fff;
+        padding: 10px;
+    }
+    div.gmt_debug_bar .gmt_toggle:hover {
+        cursor: pointer;
+    }
+    div.gmt_debug_bar.closed div.gmt_debug_container {
+        display: none !important;
+    }
+    div.gmt_debug_bar.closed {
+        height: 72px !important;
+    }
+</style>
+
+<script>
+    $(document).ajaxSuccess(function(event, xhr, settings, json) {
+        if(settings.url.includes("extension/module/gmt_facebook/track") && typeof json.debug !== 'undefined') {
+            if(!$("div.gmt_debug_bar").find("div.gmt_debug_container").find("h3.fb_api_conversions_debug").length)
+                $("div.gmt_debug_bar").find("div.gmt_debug_container").append('<center><h3 class="fb_api_conversions_debug">Facebook API conversions - Server connection with API</h3></center>');
+            if(!$("div.gmt_debug_bar").find("div.gmt_debug_container").find("div.gmt_debug_code.fb_api_conversions_debug").length)
+                $("div.gmt_debug_bar").find("div.gmt_debug_container").append('<div class="gmt_debug_code fb_api_conversions_debug"></div>');
+
+            $("div.gmt_debug_bar").find("div.gmt_debug_container").find("div.gmt_debug_code.fb_api_conversions_debug").append("<pre>"+json.debug+"</pre>");
+        }
+    });
+    
+    function gmt_gmt_debug_bar_toggle() {
+        $("div.gmt_debug_bar").toggleClass("closed");
+        if($("div.gmt_debug_bar").hasClass("closed"))
+            $("div.gmt_debug_bar").find(".gmt_toggle").html("&#9650;");
+        else
+            $("div.gmt_debug_bar").find(".gmt_toggle").html("&#9660;");
+    }
+</script>
+
+<div class="gmt_debug_bar">
+    <div class="gmt_toggle" onclick="gmt_gmt_debug_bar_toggle()">&#9660;</div>
+    <center><h2>Google marketing tools - Debug mode</h2></center>
+    <div class="gmt_debug_container">
+        {% for key, data in gmt_data %}
+        <center><h3>DataLayer: {{ key }}</h3></center>
+        <div class="gmt_debug_code">
+            <pre>{{ data }}</pre>
+        </div>
+        {% endfor %}
+    </div>
+</div>

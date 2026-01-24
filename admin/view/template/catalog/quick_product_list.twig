@@ -1,0 +1,941 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right"><a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_copy }}" class="btn btn-default" onclick="$('#form-product').attr('action', '{{ copy }}').submit()"><i class="fa fa-copy"></i></button>
+        <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-product').submit() : false;"><i class="fa fa-trash-o"></i></button>
+        <button type="button" data-toggle="tooltip" onclick="$('#form-product').attr('action', '{{ simple_pu }}'); $('#form-product').submit();" class="btn btn-primary"><i class="fa fa-retweet"></i>{{ button_simple_pu }}</button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+    </div>
+    <div class="panel-body">
+    <div class="well">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label" for="input-name">{{ entry_name }}</label>
+            <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="input-model">{{ entry_model }}</label>
+            <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control" />
+          </div>
+           <div class="form-group">
+          <label class="control-label" for="input-manufacturer">Manufacturer</label>
+          <select name="filter_manufacturer_id" id="select-manufacturer" class="form-control" >
+          <option value="*"></option>
+                    {% for manufacturer in manufacturers %}
+                        {% if manufacturer.manufacturer_id == filter_manufacturer_id %}
+                            <option value="{{ manufacturer.manufacturer_id }}" selected="selected">{{  manufacturer.name }}</option>
+                        {% else %}
+                            <option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+          
+        </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label" for="input-price">{{ entry_price }}</label>
+            <input type="text" name="filter_price" value="{{ filter_price }}" placeholder="{{ entry_price }}" id="input-price" class="form-control" />
+          </div>
+          <!-- <div class="form-group">
+            <label class="control-label" for="input-special-price">{{ entry_special_price }}</label>
+            <input type="text" name="filter_special_price" value="{{ filter_special_price }}" placeholder="{{ entry_special_price }}" id="input-special-price" class="form-control" />
+          </div> -->
+          <div class="form-group">
+            <label class="control-label" for="input-quantity">{{ entry_quantity }}</label>
+            <input type="text" name="filter_quantity" value="{{ filter_quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="form-control" />
+          </div>
+              <div class="form-group">
+            <label class="control-label" for="input-status">Tax Class</label>
+            <select name="filter_tax_class_id" id="select-tax-class" class="form-control" >
+                    <option value="*"></option>
+                    {% for tax_class in tax_classes %}
+                        {% if tax_class.tax_class_id == filter_tax_class_id %}
+                            <option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
+                        {% else %}
+                            <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+           </div>
+      </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label class="control-label" for="input-status">{{ entry_status }}</label>
+        <select name="filter_status" id="input-status" class="form-control">
+          <option value=""></option>
+          {% if filter_status == '1' %}
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+          {% else %}
+            <option value="1">{{ text_enabled }}</option>
+          {% endif %}
+            
+          {% if filter_status == '0' %}
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+          {% else %}
+            <option value="0">{{ text_disabled }}</option>
+          {% endif %}
+        </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="input-status">Categories</label>
+            <select name="filter_category_id" id="select-category" class="form-control" >
+                    <option value="*"></option>
+                    {% for category in categories %}
+                        {% if category.category_id == filter_category_id %}
+                            <option value="{{ category.category_id }}" selected="selected">{{ category.name }}</option>
+                        {% else %}
+                            <option value="{{ category.category_id }}">{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+           </div>
+
+          <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form_chk_column">
+        <label for="input-name" class="control-label">Editable Fields</label>
+        <input type="checkbox" onclick="$('.editable_fields input[type*=\'checkbox\']').prop('checked', this.checked);" /> Select All 
+        <button type="button" data-toggle="tooltip" onclick="$('#form_chk_column').attr('action', '{{ simple_pu_column }}'); $('#form_chk_column').submit();" class="btn btn-primary btn-sm"><i class="fa fa-retweet"></i>{{ ' Display Column' }}</button>
+        <div class="form-group editable_fields">
+        <div class="col-sm-2">
+          <p><input type="checkbox" name="img_edit" {% if cache_data.img_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Image</p>
+          <p><input type="checkbox" name="product_name_edit" {% if cache_data.product_name_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Product Name</p>
+          <p><input type="checkbox" name="desc_edit"  {% if cache_data.desc_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Product Description</p>
+          <p><input type="checkbox" name="meta_title_edit"  {% if cache_data.meta_title_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Meta Title</p>
+          <p><input type="checkbox" name="meta_desc_edit"  {% if cache_data.meta_desc_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Meta Description</p>
+          <p><input type="checkbox" name="meta_keyword_edit" {% if cache_data.meta_keyword_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Meta Keyword</p>
+          <p><input type="checkbox" name="tag_edit" {% if cache_data.tag_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Product Tags</p>
+        </div>
+        <div class="col-sm-2">
+          <p><input type="checkbox" name="model_edit" {% if cache_data.model_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Model</p>
+          <p><input type="checkbox" name="price_edit" {% if cache_data.price_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Price</p>
+          <p><input type="checkbox" name="special_edit" {% if cache_data.special_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} />Special Price</p>
+          <p><input type="checkbox" name="qty_edit" {% if cache_data.qty_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Quantity</p>
+          <p><input type="checkbox" name="status_edit" {% if cache_data.status_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Status</p>
+          <p><input type="checkbox" name="sku_edit" {% if cache_data.sku_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> SKU</p>
+          <p><input type="checkbox" name="upc_edit" {% if cache_data.upc_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> UPC</p>
+          <p><input type="checkbox" name="ean_edit" {% if cache_data.ean_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> EAN</p>
+        </div>
+        <div class="col-sm-2">
+          <p><input type="checkbox" name="jan_edit" {% if cache_data.jan_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> JAN</p>
+          <p><input type="checkbox" name="isbn_edit" {% if cache_data.isbn_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> ISBN</p>
+          <p><input type="checkbox" name="mpn_edit" {% if cache_data.mpn_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> MPN</p>
+          <p><input type="checkbox" name="location_edit" {% if cache_data.location_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Location</p>
+          <p><input type="checkbox" name="category_edit" {% if cache_data.category_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Categories</p>
+          <p><input type="checkbox" name="filter_edit" {% if cache_data.filter_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %}  /> Filter</p>
+          <p><input type="checkbox" name="download_edit" {% if cache_data.download_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Download</p>
+        </div>
+        <div class="col-sm-2">
+          <p><input type="checkbox" name="manufacturer_edit" {% if cache_data.manufacturer_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Manufacturer</p>
+          <p><input type="checkbox" name="related_prod_edit" {% if cache_data.related_prod_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Related Products</p>
+          <p><input type="checkbox" name="taxclass_edit" {% if cache_data.taxclass_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> TAX Class</p>
+          <p><input type="checkbox" name="min_qty_edit" {% if cache_data.min_qty_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Minimum Quantity</p>
+          <p><input type="checkbox" name="requiresshipping_edit" {% if cache_data.requiresshipping_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Requires Shipping</p>
+          <p><input type="checkbox" name="seokeyword_edit" {% if cache_data.seokeyword_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> SEO Keyword</p>
+          <p><input type="checkbox" name="subtract_edit" {% if cache_data.subtract_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Subtract Stock</p>
+        </div>
+        <div class="col-sm-2">
+          <p><input type="checkbox" name="dimension_edit" {% if cache_data.dimension_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Dimension (L x W x H)</p>
+          <p><input type="checkbox" name="length_edit" {% if cache_data.length_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Length Class</p>
+          <p><input type="checkbox" name="weight_edit" {% if cache_data.weight_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Weight</p>
+          <p><input type="checkbox" name="weight_class_edit" {% if cache_data.weight_class_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Weight Class</p>
+          <p><input type="checkbox" name="date_avilable_edit" {% if cache_data.date_avilable_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Date Available</p>
+          <p><input type="checkbox" name="sort_order_edit" {% if cache_data.sort_order_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Sort Order</p>
+          <p><input type="checkbox" name="view_edit" {% if cache_data.view_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Product Viewed</p>
+        </div>
+        <div class="col-sm-2">
+          <p><input type="checkbox" name="points_edit" {% if cache_data.points_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Points</p>
+          <p><input type="checkbox" name="stock_status_edit" {% if cache_data.stock_status_edit  ==  'on' %} {{  'checked="checked"' }} {% endif %} /> Stock Status</p>
+        </div>
+        <script type="text/javascript">
+                $("input:checkbox:not(:checked)").each(function() {
+                  var column = "table ." + $(this).attr("name");
+                  $(column).hide();
+                });
+
+                $("input:checkbox").click(function(){
+                  var column = "table ." + $(this).attr("name");
+                  $(column).toggle();
+                });
+              </script>
+        </div>
+        </form>
+        </div>
+      </div>
+    </div>
+    <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-product">
+      <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+    <tr>
+            <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+      {% if cache_data.img_edit  ==  'on' %}<td class="text-center img_edit" style="{% if cache_data.img_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %} {{ "display:none;" }} {% endif %}">{{ column_image }}</td>{% endif %}
+            {% if cache_data.product_name_edit  ==  'on' %}<td class="text-left product_name_edit" style="{% if cache_data.product_name_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}">
+        {% if sort  ==  'pd.name' %}
+          <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+        {% else %}
+          <a href="{{ sort_name }}">{{ column_name }}</a>
+        {% endif %}
+      </td>
+      {% endif %}
+            {% if cache_data.desc_edit  ==  'on' %}<td class="text-left desc_edit" style="{% if cache_data.desc_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_description }}</td>{% endif %}
+            {% if cache_data.meta_title_edit  ==  'on' %}<td class="text-left meta_title_edit" style="{% if cache_data.meta_title_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_meta_title }}</td>{% endif %}
+            {% if cache_data.meta_desc_edit  ==  'on' %}<td class="text-left meta_desc_edit" style="{% if cache_data.meta_desc_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_meta_description }}</td>{% endif %}
+            {% if cache_data.meta_keyword_edit  ==  'on' %}<td class="text-left meta_keyword_edit" style="{% if cache_data.meta_keyword_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_meta_keyword }}</td>{% endif %}
+            {% if cache_data.tag_edit  ==  'on' %}<td class="text-left tag_edit" style="{% if cache_data.tag_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_tag }}</td>{% endif %}
+            {% if cache_data.model_edit  ==  'on' %}<td class="text-left model_edit" style="{% if cache_data.model_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if sort  ==  'p.model' %}
+          <a href="{{ sort_model }}" class="{{ order|lower }}">{{ column_model }}</a>
+        {% else %}
+          <a href="{{ sort_model }}">{{ column_model }}</a>
+        {% endif %}
+      </td>{% endif %} 
+            {% if cache_data.sku_edit  ==  'on' %}<td class="text-left sku_edit" style="{% if cache_data.sku_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_sku }}</td>{% endif %}
+            {% if cache_data.upc_edit  ==  'on' %}<td class="text-left upc_edit" style="{% if cache_data.upc_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_upc }}</td>{% endif %}
+            {% if cache_data.ean_edit  ==  'on' %}<td class="text-left ean_edit" style="{% if cache_data.ean_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_ean }}</td>{% endif %}
+            {% if cache_data.jan_edit  ==  'on' %}<td class="text-left jan_edit" style="{% if cache_data.jan_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_jan }}</td>{% endif %}
+            {% if cache_data.isbn_edit  ==  'on' %}<td class="text-left isbn_edit" style="{% if cache_data.isbn_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_isbn }}</td>{% endif %}
+            {% if cache_data.mpn_edit  ==  'on' %}<td class="text-left mpn_edit" style="{% if cache_data.mpn_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_mpn }}</td>{% endif %}
+            {% if cache_data.location_edit  ==  'on' %}<td class="text-left location_edit" style="{% if cache_data.location_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_location }}</td>{% endif %}
+            {% if cache_data.category_edit  ==  'on' %}<td class="text-left category_edit" style="{% if cache_data.category_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_category }}</td>{% endif %}
+            {% if cache_data.filter_edit  ==  'on' %}<td class="text-left filter_edit" style="{% if cache_data.filter_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_filter }}</td>{% endif %}
+            {% if cache_data.download_edit  ==  'on' %}<td class="text-left download_edit" style="{% if cache_data.download_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_download }}</td>{% endif %}
+            {% if cache_data.manufacturer_edit  ==  'on' %}<td class="text-left manufacturer_edit" style="{% if cache_data.manufacturer_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_manufacturer }}</td>{% endif %}
+            {% if cache_data.related_prod_edit  ==  'on' %}<td class="text-left related_prod_edit" style="{% if cache_data.related_prod_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_related }}</td>{% endif %}
+            {% if cache_data.taxclass_edit  ==  'on' %}<td class="text-left taxclass_edit" style="{% if cache_data.taxclass_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_tax_class }}</td>{% endif %}
+            {% if cache_data.min_qty_edit  ==  'on' %}<td class="text-left min_qty_edit" style="{% if cache_data.min_qty_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_minimum }}</td>{% endif %}
+            {% if cache_data.subtract_edit  ==  'on' %}<td class="text-left subtract_edit" style="{% if cache_data.subtract_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_subtract }}</td>{% endif %}
+            {% if cache_data.stock_status_edit  ==  'on' %}<td class="text-left stock_status_edit" style="{% if cache_data.stock_status_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_stock_status }}</td>{% endif %}
+            {% if cache_data.requiresshipping_edit  ==  'on' %}<td class="text-left requiresshipping_edit" style="{% if cache_data.requiresshipping_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_shipping }}</td>{% endif %}
+            {% if cache_data.seokeyword_edit  ==  'on' %}<td class="text-left seokeyword_edit" style="{% if cache_data.seokeyword_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_keyword }}</td>{% endif %}
+            {% if cache_data.date_avilable_edit  ==  'on' %}<td class="text-left date_avilable_edit" style="{% if cache_data.date_avilable_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_date_available }}</td>{% endif %}
+            {% if cache_data.dimension_edit  ==  'on' %}<td class="text-left dimension_edit" style="{% if cache_data.dimension_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_dimension }}</td>{% endif %}
+            {% if cache_data.length_edit  ==  'on' %}<td class="text-left length_edit" style="{% if cache_data.length_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_length_class }}</td>{% endif %}
+            {% if cache_data.weight_edit  ==  'on' %}<td class="text-left weight_edit" style="{% if cache_data.weight_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+              {% if sort  ==  'p.weight' %}
+              <a href="{{ sort_weight }}" class="{{ order|lower }}">{{ column_weight }}</a>
+              {% else %}
+              <a href="{{ sort_weight }}">{{ column_weight }}</a>
+              {% endif %}
+            </td>{% endif %}
+            {% if cache_data.weight_class_edit  ==  'on' %}<td class="text-left weight_class_edit" style="{% if cache_data.weight_class_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_weight_class }}</td>{% endif %}
+            {% if cache_data.sort_order_edit  ==  'on' %}<td class="text-left sort_order_edit" style="{% if cache_data.sort_order_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_sort_order }}</td>{% endif %}
+            {% if cache_data.view_edit  ==  'on' %}<td class="text-left view_edit" style="{% if cache_data.view_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_product_viewed }}</td>{% endif %}
+            {% if cache_data.points_edit  ==  'on' %}<td class="text-left points_edit" style="{% if cache_data.points_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >{{ entry_points }}</td>{% endif %}
+            {% if cache_data.price_edit  ==  'on' %}<td class="text-right price_edit" style="{% if cache_data.price_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if sort  ==  'p.price' %}
+          <a href="{{ sort_price }}" class="{{ order|lower }}">{{ column_price }}</a>
+        {% else %}
+          <a href="{{ sort_price }}">{{ column_price }}</a>
+        {% endif %}
+      </td>{% endif %} 
+      {% if cache_data.special_edit  ==  'on' %}<td class="text-right special_edit" style="{% if cache_data.special_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if sort  ==  'p.price' %}
+          <a href="{{ sort_price }}" class="{{ order|lower }}">{{ column_special }}</a>
+        {% else %}
+          <a href="{{ sort_price }}">{{ column_special }}</a>
+        {% endif %}
+      </td>{% endif %} 
+      
+            {% if cache_data.qty_edit  ==  'on' %}<td class="text-right qty_edit" style="{% if cache_data.qty_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if sort  ==  'p.quantity' %}
+          <a href="{{ sort_quantity }}" class="{{ order|lower }}">{{ column_quantity }}</a>
+        {% else %}
+          <a href="{{ sort_quantity }}">{{ column_quantity }}</a>
+        {% endif %}
+      </td>{% endif %} 
+      
+            {% if cache_data.status_edit  ==  'on' %}<td class="text-left status_edit" style="{% if cache_data.status_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if sort  ==  'p.status' %}
+          <a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>
+        {% else %}
+          <a href="{{ sort_status }}">{{ column_status }}</a>
+        {% endif %}
+      </td>{% endif %} 
+            <td class="text-right">{{ column_action }}</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% if products %}
+      
+          {% for product in products %}
+          <tr>
+            <td class="text-center">
+        {% if product.product_id in selected %}
+          <input type="checkbox" name="selected[]" id="{{ product.product_id}}_select" value="{{ product.product_id }}" checked="checked" />
+        {% else %}
+          <input type="checkbox" name="selected[]" id="{{ product.product_id }}_select" value="{{ product.product_id }}" />
+        {% endif %}
+      </td>
+      
+      {% if cache_data.img_edit  ==  'on' %}
+        <td class="text-center img_edit" style="{% if cache_data.img_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if product.image %}
+          <a href="{{ product.image }}" class="img-thumbnail" id="{{ product.product_id }}" data-toggle="image" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' name="{{ product.product_id }}_image" > <img src="{{ product.image }}" title="" data-placeholder="{{ placeholder }}" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /> </a>
+          <input id="{{ product.product_id }}_image" class="{{ column_image|lower }} editable" value="{{ product.thumb }}" name="product_description[{{ product.product_id }}][image]" type="hidden" onChange="this.form.submit()" onclick='document.postElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' checked="checked" />
+        {% else %}
+          <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+        </td>
+        {% endif %}
+      {% endif %}
+      
+            {% if cache_data.product_name_edit  ==  'on' %}
+      <td class="left name product_name_edit">
+        {% for language in languages %}
+          <div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+          <input type="text" class="editable form-control" name="product_description[{{ product.product_id }}][language][{{ language.language_id }}][name]" id="{{ product.product_id }}_{{ language.language_id }}_name" value="{{ product.name[language.language_id].name }}" size="50" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width: 200px"/>
+          </div>
+        {% endfor %}    
+            </td>
+      {% endif %}
+      
+      {% if cache_data.desc_edit  ==  'on' %}
+            <td class="text-left desc_edit" style="{% if cache_data.desc_edit  ==  'on' %} {{ "display:table-cell;" }}  {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% for language in languages %}
+          <div class="input-group" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'  placeholder="{{ entry_description }}"> <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+          <textarea class="form-control summernote" name="product_description[{{ product.product_id }}][language][{{ language.language_id }}][description]"  id="{{ product.product_id }}_{{ language.language_id }}_desc" data-toggle="summernote" data-lang="{{ summernote }}">{{ product.name[language.language_id].description ? product.name[language.language_id].description : ''}} </textarea>
+          
+          </div>
+        {% endfor %}
+            </td>
+      {% endif %}
+      
+      {% if cache_data.meta_title_edit  ==  'on' %}
+      <td class="text-left meta_title_edit" style="{% if cache_data.meta_title_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% for language in languages %}
+          <div class="input-group" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'  placeholder="{{ entry_description }}"> <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+          <input type="text" class="editable form-control" name="product_description[{{ product.product_id }}][language][{{ language.language_id }}][meta_title]" id="{{ product.product_id }}_{{ language.language_id }}_meta_title" value="{{ product.name[language.language_id].meta_title }}" size="50" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width: 200px"/>
+          </div>
+        {% endfor %}
+      </td>
+      {% endif %}
+      
+      {% if cache_data.meta_desc_edit  ==  'on' %}
+            <td class="text-left meta_desc_edit" style="{% if cache_data.meta_desc_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% for language in languages %}
+          <div class="input-group" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'  placeholder="{{ entry_description }}"> <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+          <textarea name="product_description[{{ product.product_id }}][language][{{ language.language_id }}][meta_description]"  id="{{ product.product_id }}_{{ language.language_id }}_meta_desc">{{ product.name[language.language_id].meta_description ? product.name[language.language_id].meta_description : '' }} </textarea>
+          </div>
+        {% endfor %}
+            </td>
+      {% endif %}
+      
+      {% if cache_data.meta_keyword_edit  ==  'on' %}
+            <td class="text-left meta_keyword_edit" style="{% if cache_data.meta_keyword_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% for language in languages %}
+          <div class="input-group" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'  placeholder="{{ entry_description }}"> <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+          <textarea name="product_description[{{ product.product_id }}][language][{{ language.language_id }}][meta_keyword]"  id="{{ product.product_id }}_{{ language.language_id }}_meta_keyword">{{ product.name[language.language_id].meta_keyword ? product.name[language.language_id].meta_keyword : '' }} </textarea>
+          </div>
+        {% endfor %}
+            </td>
+      {% endif %}
+      
+      {% if cache_data.tag_edit  ==  'on' %}
+            <td class="text-left tag_edit" style="{% if cache_data.tag_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% for language in languages %}
+          <div class="input-group"> <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+          <input type="text" class="editable form-control" name="product_description[{{ product.product_id }}][language][{{ language.language_id }}][tag]" id="{{ product.product_id }}_{{ language.language_id }}_tag" value="{{ product.name[language.language_id].tag }}" size="50" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width: 150px"/>
+          </div>
+        {% endfor %}
+            </td>
+      {% endif %}
+      
+      {% if cache_data.model_edit  ==  'on' %}
+        <td class="text-left model_edit" style="{% if cache_data.model_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input type="text" class="{{ column_model|lower }} editable form-control" name="product_description[{{ product.product_id }}][model]" id="{{ product.product_id }}_model" value="{{ product.model }}" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:100px" /></td>
+      {% endif %}
+      
+            {% if cache_data.sku_edit  ==  'on' %}
+        <td class="text-right sku_edit" style="{% if cache_data.sku_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][sku]" value="{{ product.sku }}" placeholder="{{ entry_sku }}" id="{{ product.product_id }}_sku" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.upc_edit  ==  'on' %}
+        <td class="text-right upc_edit" style="{% if cache_data.upc_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][upc]" value="{{ product.upc }}" placeholder="{{ entry_upc }}" id="{{ product.product_id }}_upc" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.ean_edit  ==  'on' %}
+        <td class="text-right ean_edit" style="{% if cache_data.ean_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][ean]" value="{{ product.ean }}" placeholder="{{ entry_ean }}" id="{{ product.product_id }}_ean" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.jan_edit  ==  'on' %}
+        <td class="text-right jan_edit" style="{% if cache_data.jan_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][jan]" value="{{ product.jan }}" placeholder="{{ entry_jan }}" id="{{ product.product_id }}_jan" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.isbn_edit  ==  'on' %}
+        <td class="text-right isbn_edit" style="{% if cache_data.isbn_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][isbn]" value="{{ product.isbn }}" placeholder="{{ entry_isbn }}" id="{{ product.product_id }}_isbn" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.mpn_edit  ==  'on' %}
+        <td class="text-right mpn_edit" style="{% if cache_data.mpn_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][mpn]" value="{{ product.mpn }}" placeholder="{{ entry_mpn }}" id="{{ product.product_id }}_mpn" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.location_edit  ==  'on' %}
+        <td class="text-right location_edit" style="{% if cache_data.location_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][location]" value="{{ product.location }}" placeholder="{{ entry_location }}" id="{{ product.product_id }}_location" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+            {% if cache_data.category_edit  ==  'on' %}
+      <td class="text-left category_edit" style="{% if cache_data.category_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <input style="width:125px" type="text" name="product_description[{{ product.product_id }}][category]" value="" placeholder="{{ entry_category }}" id="input-category_{{ product.product_id }}" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+        <div id="product-category_{{ product.product_id }}" class="well well-sm" style="height: 150px; overflow: auto;" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+          {% for product_category in prod_categories %}
+          {% if product_category.product_id  ==  product.product_id %}
+          <div id="product-category_{{ product.product_id }}{{ product_category.category_id }}"> <i class="fa fa-minus-circle"></i> {{ product_category.name }}
+            <input type="hidden" name="product_description[{{ product.product_id }}][product_category][]" value="{{ product_category.category_id }}" />
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </td>
+      {% endif %}
+      
+            {% if cache_data.filter_edit  ==  'on' %}
+      <td class="text-left filter_edit" style="{% if cache_data.filter_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <input style="width:125px" type="text" name="product_description[{{ product.product_id }}][filter]" value="" placeholder="{{ entry_filter }}" id="input-filter_{{ product.product_id }}" class="form-control" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'/>
+        <div id="product-filter_{{ product.product_id }}" class="well well-sm" style="height: 150px; overflow: auto;" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+          {% for product_filter in prod_filters %}
+          {% if product_filter.product_id  ==  product.product_id %}
+          <div id="product-filter{{ product_filter.filter_id }}"> <i class="fa fa-minus-circle"></i> {{ product_filter.name }}
+          <input type="hidden" name="product_description[{{ product.product_id }}][product_filter][]" value="{{ product_filter.filter_id }}" />
+          </div>
+          {% endif %}
+          {% endfor %}
+
+        </div>
+        
+      </td>
+      {% endif %}
+        
+      {% if cache_data.download_edit  ==  'on' %}
+      <td class="text-left download_edit" style="{% if cache_data.download_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <input style="width:125px" type="text" name="product_description[{{ product.product_id }}][download]" value="" placeholder="{{ entry_download }}" id="input-download_{{ product.product_id }}" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'/>
+        <div id="product-download_{{ product.product_id }}" class="well well-sm" style="height: 150px; overflow: auto;" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+          {% for product_download in prod_downloads %}
+          {% if product_download.product_id  ==  product.product_id %}
+          <div id="product-download{{ product_download.download_id }}"><i class="fa fa-minus-circle"></i> {{ product_download.name }}
+            <input type="hidden" name="product_description[{{ product.product_id }}][product_download][]" value="{{ product_download.download_id }}" />
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </td>
+      {% endif %}
+        
+      {% if cache_data.manufacturer_edit  ==  'on' %}
+      <td class="text-right manufacturer_edit" style="{% if cache_data.manufacturer_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %} {{ "display:none;" }} {% endif %}" >
+        <select style="width:125px" name="product_description[{{ product.product_id }}][manufacturer_id]" id="input-manufacturer-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+          <option value="0">{{ text_none }}</option>
+          {% for manufacturer in manufacturers %}
+          {% if manufacturer.manufacturer_id  ==  product.manufacturer_id %}
+          <option value="{{ manufacturer.manufacturer_id }}" selected="selected">{{ manufacturer.name }}</option>
+          {% else %}
+          <option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name }}</option>
+          {% endif %}{% endfor %}
+        </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.related_prod_edit  ==  'on' %}
+      <td class="text-left related_prod_edit" style="{% if cache_data.related_prod_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %} {{ "display:none;" }} {% endif %}" >
+        <input style="width:125px" type="text" name="product_description[{{ product.product_id }}][related]" value="" placeholder="{{ entry_related }}" id="input-related_{{ product.product_id }}" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'/>
+        <div id="product-related_{{ product.product_id }}" class="well well-sm" style="height: 150px; overflow: auto;" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+          {% for product_related in prod_relateds %}
+          {% if product_related.product_id  ==  product.product_id %}
+          <div id="product-related{{ product_related.related_product_id }}"> <i class="fa fa-minus-circle"></i> {{ product_related.name }}
+          <input type="hidden" name="product_description[{{ product.product_id }}][product_related][]" value="{{ product_related.related_product_id }}" />
+          </div>
+          {% endif %}{% endfor %}
+
+        </div>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.taxclass_edit  ==  'on' %}
+      <td class="text-right taxclass_edit" style="{% if cache_data.taxclass_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <select style="width:125px" name="product_description[{{ product.product_id }}][tax_class_id]" id="input-tax-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+        <option value="0">{{ text_none }}</option>
+        {% for tax_class in tax_classes %}
+        {% if tax_class.tax_class_id  ==  product.tax_class_id %}
+          <option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
+          {% else %}
+          <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
+        {% endif %}
+        {% endfor %}
+        </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.min_qty_edit  ==  'on' %}
+        <td class="text-right min_qty_edit" style="{% if cache_data.min_qty_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][minimum]" value="{{ product.minimum }}" placeholder="{{ entry_minimum }}" id="{{ product.product_id }}_minimum" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+          
+      {% if cache_data.subtract_edit  ==  'on' %}
+      <td class="text-right subtract_edit" style="{% if cache_data.subtract_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+      <select style="width:125px" name="product_description[{{ product.product_id }}][subtract]" id="input-min-qty-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+        {% if product.subtract %}
+          <option value="1" selected="selected">{{ text_yes }}</option>
+          <option value="0">{{ text_no }}</option>
+        {% else %}
+          <option value="1">{{ text_yes }}</option>
+          <option value="0" selected="selected">{{ text_no }}</option>
+        {% endif %}
+            </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.stock_status_edit  ==  'on' %}
+      <td class="text-right stock_status_edit" style="{% if cache_data.stock_status_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+      <select style="width:125px" name="product_description[{{ product.product_id }}][stock_status_id]" id="input-stock-status-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+        <option value="0">{{ text_none }}</option>
+        {% for stock_status in stock_statuses %}
+          {% if stock_status.stock_status_id  ==  product.stock_status_id %}
+          <option value="{{ stock_status.stock_status_id }}" selected="selected">{{ stock_status.name }}</option>
+          {% else %}
+          <option value="{{ stock_status.stock_status_id }}">{{ stock_status.name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.requiresshipping_edit  ==  'on' %}
+      <td class="text-right requiresshipping_edit" style="{% if cache_data.requiresshipping_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+      <select style="width:125px" name="product_description[{{ product.product_id }}][shipping]" id="input-requiresshipping-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+        {% if product.shipping %}
+          <option value="1" selected="selected">{{ text_yes }}</option>
+          <option value="0">{{ text_no }}</option>
+        {% else %}
+          <option value="1">{{ text_yes }}</option>
+          <option value="0" selected="selected">{{ text_no }}</option>
+        {% endif %}
+            </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.seokeyword_edit  ==  'on' %}
+        <td class="text-right seokeyword_edit" style="{% if cache_data.seokeyword_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:125px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][keyword]" value="{{ product.keyword }}" placeholder="{{ entry_keyword }}" id="{{ product.product_id }}_keyword" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+      {% if cache_data.date_avilable_edit  ==  'on' %}
+      <td class="text-right date_avilable_edit" style="{% if cache_data.date_avilable_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><div class="input-group date" >
+              <input style="width:125px" type="text" name="product_description[{{ product.product_id }}][date_available]" value="{{ product.date_available }}" placeholder="{{ entry_date_available }}" data-date-format="YYYY-MM-DD" id="input-date-available" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'/>
+              <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'><i class="fa fa-calendar"></i></button>
+              </span> </div>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.dimension_edit  ==  'on' %}
+      <td class="text-right dimension_edit" style="{% if cache_data.dimension_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><label class="col-sm-2 control-label" for="input-length">{{ entry_length }}</label>
+            <input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][length]" value="{{ product.length }}" placeholder="{{ entry_length }}" id="{{ product.product_id }}_length" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+            <label class="col-sm-2 control-label" for="input-length">{{ entry_width }}</label>
+            <input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][width]" value="{{ product.width }}" placeholder="{{ entry_width }}" id="{{ product.product_id }}_width" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+            <label class="col-sm-2 control-label" for="input-length">{{ entry_height }}</label>
+            <input style="width:100px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][height]" value="{{ product.height }}" placeholder="{{ entry_height }}" id="{{ product.product_id }}_height" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+      </td>
+      {% endif %}
+      
+      {% if cache_data.length_edit  ==  'on' %}
+      <td class="text-right length_edit" style="{% if cache_data.length_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <select style="width:125px" name="product_description[{{ product.product_id }}][length_class_id]" id="input-length-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+        {% for length_class in length_classes %}
+        {% if length_class.length_class_id  ==  product.length_class_id %}
+          <option value="{{ length_class.length_class_id }}" selected="selected">{{ length_class.title }}</option>
+        {% else %}
+          <option value="{{ length_class.length_class_id }}">{{ length_class.title }}</option>
+        {% endif %}
+        {% endfor %}
+        </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.weight_edit  ==  'on' %}
+        <td class="text-right weight_edit" style="{% if cache_data.weight_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <input style="width:125px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][weight]" value="{{ product.weight }}" placeholder="{{ entry_weight }}" id="{{ product.product_id }}_weight" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+        </td>
+      {% endif %}
+      
+      {% if cache_data.weight_class_edit  ==  'on' %}
+      <td class="text-right weight_class_edit" style="{% if cache_data.weight_class_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %} {{ "display:none;" }} {% endif %}" >
+        <select style="width:125px" name="product_description[{{ product.product_id }}][weight_class_id]" id="input-weight-class" class="form-control" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");'>
+        {% for weight_class in weight_classes %}
+        {% if weight_class.weight_class_id  ==  product.weight_class_id %}
+          <option value="{{ weight_class.weight_class_id }}" selected="selected">{{ weight_class.title }}</option>
+        {% else %}
+          <option value="{{ weight_class.weight_class_id }}">{{ weight_class.title }}</option>
+        {% endif %}
+        {% endfor %}
+        </select>
+      </td>
+      {% endif %}
+      
+      {% if cache_data.sort_order_edit  ==  'on' %}
+        <td class="text-right sort_order_edit" style="{% if cache_data.sort_order_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <input style="width:125px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][sort_order]" value="{{ product.sort_order }}" placeholder="{{ entry_sort_order }}" id="{{ product.product_id }}_sort_order" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+      </td>
+      {% endif %}
+      
+      {% if cache_data.view_edit  ==  'on' %}
+        <td class="text-right view_edit" style="{% if cache_data.view_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:125px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][viewed]" value="{{ product.viewed }}" placeholder="{{ entry_product_viewed }}" id="{{ product.product_id }}_viewed" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+      {% if cache_data.points_edit  ==  'on' %}
+        <td class="text-right points_edit" style="{% if cache_data.points_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" ><input style="width:125px" type="text" class="form-control editable" name="product_description[{{ product.product_id }}][points]" value="{{ product.points }}" placeholder="{{ entry_points }}" id="{{ product.product_id }}_viewed" size="16" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' /></td>
+      {% endif %}
+      
+      {% if cache_data.price_edit  ==  'on' %}
+      <td class="text-right price_edit" style="{% if cache_data.price_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+      
+      
+        {% if product.special %}
+          <input type="text" class="{{ column_price|lower }} form-control editable quick_decorate" name="product_description[{{ product.product_id }}][price]" id="{{ product.product_id }}_price" value="{{ product.price }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+        {% else %}
+          <input type="text" class="{{ column_price|lower }} form-control editable" name="product_description[{{ product.product_id }}][price]" id="{{ product.product_id }}_price" value="{{ product.price }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:100px" />
+        {% endif %}
+      
+      </td>
+      {% endif %}
+
+      <!-- special -->
+      {% if cache_data.special_edit  ==  'on' %}
+      <td class="text-right special_edit" style="{% if cache_data.special_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+      {% if product.special %}
+        <div class="text-danger">
+          <input type="text" class="{{ column_price|lower }} form-control editable quick_edit_danger" name="product_description[{{ product.product_id }}][special]" id="{{ product.product_id }}_special" value="{{ product.special }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:100px" />
+        </div>
+      {#{% else %}
+      
+        {% if product.special %}
+          <input type="text" class="{{ column_price|lower }} form-control editable quick_decorate" name="product_description[{{ product.product_id }}][price]" id="{{ product.product_id }}_price" value="{{ product.price }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' />
+        {% else %}
+          <input type="text" class="{{ column_price|lower }} form-control editable" name="product_description[{{ product.product_id }}][price]" id="{{ product.product_id }}_price" value="{{ product.price }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:100px" />
+        {% endif %}#}
+      {% endif %}
+      </td>
+      {% endif %}
+      <!-- end special -->
+      
+      {% if cache_data.qty_edit  ==  'on' %}
+        <td class="text-right qty_edit" style="{% if cache_data.qty_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        {% if product.quantity <= 0 %}
+          <span class="label label-warning" style="color: black;">
+            <input type="text" class="{{ column_quantity|lower }} editable" name="product_description[{{ product.product_id }}][quantity]" id="{{ product.product_id }}_quantity" value="{{ product.quantity }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:60px" />
+          </span>
+        {% elseif  product.quantity <= 5 %}
+          <span class="label label-danger" style="color: black;">
+            <input type="text" class="{{ column_quantity|lower }} editable" name="product_description[{{ product.product_id }}][quantity]" id="{{ product.product_id }}_quantity" value="{{ product.quantity }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:60px" />
+          </span>
+        {% else %}
+          <span class="label label-success" style="color: black;">
+            <input type="text" class="{{ column_quantity|lower }} editable" name="product_description[{{ product.product_id }}][quantity]" id="{{ product.product_id }}_quantity" value="{{ product.quantity }}" size="8" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:60px;"/>
+          </span>
+        {% endif %}
+        </td>
+      {% endif %}
+      
+      {% if cache_data.status_edit  ==  'on' %}
+      <td class="left status status_edit" style="{% if cache_data.status_edit  ==  'on' %} {{ "display:table-cell;" }} {% else %}   {{ "display:none;" }} {% endif %}" >
+        <select class="form-control" name="product_description[{{ product.product_id }}][status]" id="{{ product.product_id }}_status" onclick='document.getElementById("{{ product.product_id }}_select").setAttribute("checked","checked");' style="width:100px" >
+        {% if product.status  ==  text_enabled %}
+          <option value="1" selected="selected">{{ text_enabled }}</option>
+          <option value="0">{{ text_disabled }}</option>
+        {% else %}
+          <option value="1">{{ text_enabled }}</option>
+          <option value="0" selected="selected">{{ text_disabled }}</option>
+        {% endif %}
+        </select>
+      </td>
+      {% endif %}
+      
+      <td class="text-right"><a href="{{ product.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+        </tr>
+    
+    {% endfor %}
+         {% else %}
+        <tr>
+          <td class="text-center" colspan="8">{{ text_no_results }}</td>
+        </tr>
+    {% endif %}
+
+        </tbody>
+        
+      </table>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-sm-6 text-left">{{ pagination }}</div>
+      <div class="col-sm-6 text-right">{{ results }}</div>
+    </div>
+  </div>
+</div>
+</div>
+<script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+  <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+<script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+  var url = 'index.php?route=catalog/quick_product&user_token={{ user_token }}';
+
+  var filter_name = $('input[name=\'filter_name\']').val();
+
+  if (filter_name) {
+    url += '&filter_name=' + encodeURIComponent(filter_name);
+  }
+
+  var filter_model = $('input[name=\'filter_model\']').val();
+
+  if (filter_model) {
+    url += '&filter_model=' + encodeURIComponent(filter_model);
+  }
+
+  var filter_price = $('input[name=\'filter_price\']').val();
+
+  if (filter_price) {
+    url += '&filter_price=' + encodeURIComponent(filter_price);
+  }
+
+  var filter_special_price = $('input[name=\'filter_special_price\']').val();
+
+  if (filter_special_price) {
+    url += '&filter_special_price=' + encodeURIComponent(filter_special_price);
+  }
+  
+  var filter_quantity = $('input[name=\'filter_quantity\']').val();
+
+  if (filter_quantity) {
+    url += '&filter_quantity=' + encodeURIComponent(filter_quantity);
+  }
+  <!-- Filter by Category -->
+  var filter_category_id = $('select[name=\'filter_category_id\']').val();
+   if (filter_category_id != '*') {
+    url += '&filter_category_id=' + encodeURIComponent(filter_category_id);
+    } 
+   <!---end of code-->
+   <!---filter tax classs -->
+   var filter_tax_class_id = $('select[name=\'filter_tax_class_id\']').val();
+   if (filter_tax_class_id != '*') {
+    url += '&filter_tax_class_id=' + encodeURIComponent(filter_tax_class_id);
+    } 
+   <!--end Of code-->
+   var filter_manufacturer_id = $('select[name=\'filter_manufacturer_id\']').val();
+   if (filter_manufacturer_id != '*') {
+    url += '&filter_manufacturer_id=' + encodeURIComponent(filter_manufacturer_id);
+    }
+  var filter_status = $('select[name=\'filter_status\']').val();
+
+  if (filter_status != '*') {
+    url += '&filter_status=' + encodeURIComponent(filter_status);
+  }
+
+  location = url;
+});
+//--></script>
+<script type="text/javascript"><!--
+$('input[name=\'filter_name\']').autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return {
+            label: item['name'],
+            value: item['product_id']
+          }
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    $('input[name=\'filter_name\']').val(item['label']);
+  }
+});
+
+$('input[name=\'filter_model\']').autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_model=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return {
+            label: item['model'],
+            value: item['product_id']
+          }
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    $('input[name=\'filter_model\']').val(item['label']);
+  }
+});
+//--></script>
+</div>
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+  pickTime: false
+});
+
+$('.time').datetimepicker({
+  pickDate: false
+});
+
+$('.datetime').datetimepicker({
+  pickDate: true,
+  pickTime: true
+});
+
+// Category - Related - Filter - Downloads autocomplete
+{% for product in products %}
+    {% if cache_data.category_edit  ==  'on' %}
+      // Category
+      $('#input-category_{{ product.product_id }}').autocomplete({
+        'source': function(request, response) {
+          $.ajax({
+            url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+              response($.map(json, function(item) {
+                return {
+                  label: item['name'],
+                  value: item['category_id']
+                }
+              }));
+            }
+          });
+        },
+        'select': function(item) {
+          $('input[name=\'category\']').val('');
+
+          $('#product-category_{{ product.product_id }}' + item['value']).remove();
+
+          $('#product-category_{{ product.product_id }}').append('<div id="product-category_{{ product.product_id }}' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_description[{{ product.product_id }}][product_category][]" value="' + item['value'] + '" /></div>');
+        }
+      });
+
+      $('#product-category_{{ product.product_id }}').delegate('.fa-minus-circle', 'click', function() {
+        $(this).parent().remove();
+      });
+    {% endif %}
+    {% if cache_data.related_prod_edit  ==  'on' %}
+      // Related
+      $('#input-related_{{ product.product_id }}').autocomplete({
+        'source': function(request, response) {
+          $.ajax({
+            url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+              response($.map(json, function(item) {
+                return {
+                  label: item['name'],
+                  value: item['product_id']
+                }
+              }));
+            }
+          });
+        },
+        'select': function(item) {
+          $('input[name=\'related\']').val('');
+
+          $('#product-related_{{ product.product_id }}' + item['value']).remove();
+
+          $('#product-related_{{ product.product_id }}').append('<div id="product-related_{{ product.product_id }}' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_description[{{ product.product_id }}][product_related][]" value="' + item['value'] + '" /></div>');
+        }
+      });
+
+      $('#product-related_{{ product.product_id }}').delegate('.fa-minus-circle', 'click', function() {
+        $(this).parent().remove();
+      });
+    {% endif %}
+    {% if cache_data.filter_edit  ==  'on' %}
+      // Filter
+      $('#input-filter_{{ product.product_id }}').autocomplete({
+        'source': function(request, response) {
+          $.ajax({
+            url: 'index.php?route=catalog/filter/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+              response($.map(json, function(item) {
+                return {
+                  label: item['name'],
+                  value: item['filter_id']
+                }
+              }));
+            }
+          });
+        },
+        'select': function(item) {
+          $('input[name=\'filter\']').val('');
+
+          $('#product-filter_{{ product.product_id }}' + item['value']).remove();
+
+          $('#product-filter_{{ product.product_id }}').append('<div id="product-filter_{{ product.product_id }}' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_description[{{ product.product_id }}][product_filter][]" value="' + item['value'] + '" /></div>');
+        }
+      });
+
+      $('#product-filter_{{ product.product_id }}').delegate('.fa-minus-circle', 'click', function() {
+        $(this).parent().remove();
+      });
+    {% endif %}
+    {% if cache_data.download_edit  ==  'on' %}
+      // Downloads
+      $('#input-download_{{ product.product_id }}').autocomplete({
+        'source': function(request, response) {
+          $.ajax({
+            url: 'index.php?route=catalog/download/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+              response($.map(json, function(item) {
+                return {
+                  label: item['name'],
+                  value: item['download_id']
+                }
+              }));
+            }
+          });
+        },
+        'select': function(item) {
+          $('input[name=\'download\']').val('');
+
+          $('#product-download_{{ product.product_id }}' + item['value']).remove();
+
+          $('#product-download_{{ product.product_id }}').append('<div id="product-download_{{ product.product_id }}' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_description[{{ product.product_id }}][product_download][]" value="' + item['value'] + '" /></div>');
+        }
+      });
+
+      $('#product-download_{{ product.product_id }}').delegate('.fa-minus-circle', 'click', function() {
+        $(this).parent().remove();
+      });
+    {% endif %}
+{% endfor %}
+//--></script>
+{{ footer }}

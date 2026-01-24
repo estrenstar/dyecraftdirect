@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>{name}</name>
+    <version>{version}</version>
+    <author>HuntBee OpenCart Services</author>
+    <link>https://www.huntbee.com</link>
+	<code>{code}</code>
+	
+    <file path="admin/controller/common/column_left.php">
+        <operation>
+            <search><![CDATA[$this->url->link('catalog/download']]></search>
+            <add position="replace"><![CDATA[$this->url->link('extension/module/hb_download']]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/download.php">
+		<operation>
+            <search><![CDATA[$file = DIR_DOWNLOAD . $download_info['filename'];]]></search>
+            <add position="before"><![CDATA[
+            $this->db->query("UPDATE `".DB_PREFIX."download` SET download_count = download_count + 1 WHERE download_id = '".(int)$download_id."'");
+            ]]></add>
+        </operation>
+    </file>
+</modification>

@@ -1,0 +1,310 @@
+{{ header }}{{ column_left }} 
+<!--Main Content block start-->
+
+<div id="content">
+	<!--Header Start-->
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-download-list" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a data-toggle="tooltip" title="{{ button_add }}" onclick="addDownload();" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+       			<a data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? deleteDownloads() : false;"><i class="fa fa-trash-o"></i></a>
+				<a id="clear-ghost-files" class="btn btn-danger ghost"><i class="fa fa-play-circle"></i>&nbsp;{{ button_remove_ghost }}</a>
+				<a href="{{ doc_link }}" target="_blank" class="btn btn-default"><i class="fa fa-book"></i>&nbsp;{{ button_doc }}</a>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<!--Header End-->
+<!--Container 1 start -->
+<div class="container-fluid">
+	<!--Start - Error / Success Message if any -->
+	{% if (error_warning) %}
+	<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	{% if (success) %}
+	<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	<!--End - Error / Success Message if any -->
+	<div id="msgoutput"></div>
+	<!--Panel Content Start-->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title"><i class="fa fa-download"></i> {{ heading_title }}</h3>
+		</div>
+		<div class="panel-body">
+
+			<!--Tabs UL Starts-->
+			<ul class="nav nav-tabs" id="tabs">
+				<li class="active"><a href="#tab-list" onclick="loadBlock('list');" data-toggle="tab"><i class="fa fa-bars"></i> {{ tab_list }}</a></li>
+				<li><a href="#tab-ghost" onclick="loadBlock('ghost');" data-toggle="tab"><i class="fa fa-bars"></i> {{ tab_ghost }}</a></li>
+			</ul>
+			<!--Tabs UL Ends-->
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab-list">
+					<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-download-list">
+					<div class="row" style="margin-bottom:10px;">
+						<div class="col-sm-8">
+							<div class="input-group">
+								<input type="text" id="search-list-value" onkeyup="searchRecord('list');" class="form-control" placeholder="{{ text_search_download }}">
+								<span class="input-group-addon btn" id="search-list-button" onclick="searchRecord('list');"><i class="fa fa-search"></i></span>
+							</div>
+						</div>
+
+						<div class="col-sm-2">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-sort"></i></span>
+								<select name="hb_download_sort" id="hb_download_sort" class="form-control" onchange="searchRecord('list');">
+									<option value="d.download_id" {% if hb_download_sort == 'd.download_id' %} selected="selected" {% endif %}>{{ text_sort_download_id }}</option>
+									<option value="dd.name" {% if hb_download_sort == 'dd.name' %} selected="selected" {% endif %}>{{ text_sort_name }}</option>
+									<option value="d.download_count" {% if hb_download_sort == 'd.download_count' %} selected="selected" {% endif %}>{{ text_sort_download_count }}</option>
+									<option value="d.date_added" {% if hb_download_sort == 'd.date_added' %} selected="selected" {% endif %}>{{ text_sort_date_added }}</option>
+									<option value="d.date_modified" {% if hb_download_sort == 'd.date_modified' %} selected="selected" {% endif %}>{{ text_sort_date_modified }}</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-2">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-sort-amount-desc"></i></span>
+								<select name="hb_download_order" id="hb_download_order" class="form-control" onchange="searchRecord('list');">
+									<option value="ASC" {% if hb_download_order == 'ASC' %} selected="selected" {% endif %}>{{ text_order_asc }}</option>
+									<option value="DESC" {% if hb_download_order == 'DESC' %} selected="selected" {% endif %}>{{ text_order_desc }}</option>
+								</select>
+							</div>
+						</div>						
+					</div>
+					</form>
+
+					<div id="list-block" class="ajax-block"></div>
+				</div>	
+
+				<div class="tab-pane " id="tab-ghost">
+					<div id="ghost-block" class="ajax-block"></div>
+				</div>		
+			</div><!--tab-content block end-->		
+
+			<!--FORM MODAL START-->
+			<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+					<h4 class="modal-title" id="edit-modal-header"></h4>
+					</div>
+					<div class="modal-body">
+						<div id="edit-modal-block"></div>
+						<div id="edit-form-result"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">{{ button_close }}</button>
+						<button type="button" class="btn btn-primary" onclick="saveDownload();">{{ button_save }}</button>
+					</div>
+				</div>
+				</div>
+			</div>
+			<!--FORM MODAL END-->
+
+			<!--PRODUCTS MODAL START-->
+			<div class="modal fade" id="products-modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-md" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+					<h4 class="modal-title" id="products-modal-header"></h4>
+					</div>
+					<div class="modal-body">
+						<div id="products-modal-block"></div>
+						<div id="products-form-result"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">{{ button_close }}</button>
+						<button type="button" class="btn btn-primary" onclick="saveProduct();">{{ button_save }}</button>
+					</div>
+				</div>
+				</div>
+			</div>
+			<!--PRODUCTS MODAL END-->			
+      </div>
+    </div>
+    <!--Panel Content End-->
+    <!--Huntbee copyrights-->
+    <div class="container-fluid">
+      <center>
+        <span class="help">{{ heading_title }} - {{ extension_version }} &copy; <a href="https://www.huntbee.com/">WWW.HUNTBEE.COM</a> | <a href="https://www.huntbee.com/get-support">SUPPORT</a></span>
+      </center>
+    </div>
+    <!--Huntbee copyrights end-->
+  </div>
+  <!--Container 1 start -->
+</div>
+<!--Main Content block end-->
+
+<style type="text/css"> 
+	a {cursor:pointer;}
+	.loaddiv{margin:100px;color:#0099CC;}
+	body{font-family: sans-serif; }
+</style>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    loadBlock('list');
+	toggleGenerateButtons();
+});
+
+$('#tabs li a').on('click', function () {
+    setTimeout(toggleGenerateButtons, 10); // Ensure active tab is updated before running
+});
+
+function toggleGenerateButtons() {
+    const type = $('#tabs .active a').attr('href').substring(1).replace('tab-', '');
+	if (type === 'ghost') {
+		$(".ghost").show();
+	} else {
+		$(".ghost").hide();
+	}    
+}
+
+function loadBlock(name) {
+    $('body').prepend('<div id="loader" class="text-center" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div>');
+    $('#loader').show();
+    $('#' + name + '-block').load('index.php?route=extension/module/hb_download/' + name + '&user_token={{ user_token }}&store_id={{ store_id }}', function() {
+        $('#loader').fadeOut(function() {
+            $(this).remove();
+        });
+    });
+}
+
+$('#list-block').delegate('.pagination a', 'click', function(e) {
+	e.preventDefault();
+	$('#list-block').load(this.href);
+});
+
+function searchRecord(item) {
+	var search_value = $('#search-'+item+'-value').val();
+	var sort = $('#hb_download_sort').val();
+	var order = $('#hb_download_order').val();
+	$('#'+item+'-block').load('index.php?route=extension/module/hb_download/'+item+'&user_token={{ user_token }}&search='+encodeURIComponent(search_value)+'&sort='+sort+'&order='+order);
+}
+</script>
+
+<script type="text/javascript">
+function addDownload(){
+	$('#edit-modal-header').html('<i class="fa fa-plus"></i>&nbsp;{{ text_add }}');
+	$('#edit-modal-block').html('<center><div class="loaddiv"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div></center>');
+	$('#edit-modal-block').load('index.php?route=extension/module/hb_download/form&user_token={{ user_token }}');
+	$('#edit-form-result').html('');
+	$('#edit-modal').modal('show');
+}
+
+function editDownload(download_id){
+	$('#edit-modal-header').html('<i class="fa fa-pencil"></i>&nbsp;{{ text_edit }}');
+	$('#edit-modal-block').html('<center><div class="loaddiv"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div></center>');
+	$('#edit-modal-block').load('index.php?route=extension/module/hb_download/form&user_token={{ user_token }}&download_id='+download_id);
+	$('#edit-form-result').html('');
+	$('#edit-modal').modal('show');
+}
+
+function editProducts(download_id){
+	$('#products-modal-header').html('<i class="fa fa-edit"></i>&nbsp;{{ text_link_products }}');
+	$('#products-modal-block').html('<center><div class="loaddiv"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div></center>');
+	$('#products-modal-block').load('index.php?route=extension/module/hb_download/product_form&user_token={{ user_token }}&download_id='+download_id);
+	$('#products-form-result').html('');
+	$('#products-modal').modal('show');
+}
+
+function saveDownload(){
+	console.log($('#form-download').serialize());
+	$('#edit-form-result').html('<center><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></center>');
+	$.ajax({
+		url: 'index.php?route=extension/module/hb_download/save&user_token={{ user_token }}',
+		type: 'post',
+		data: $('#form-download').serialize(),
+		dataType: 'json',
+		success: function(json) {
+			if (json['error']) {
+				$('#edit-form-result').html('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+			if (json['success']) {
+				$('#edit-form-result').html('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				$('#edit-modal').modal('hide');
+				loadBlock('list');
+			}
+		}
+	});
+}
+
+function saveProduct(){
+	console.log($('#form-product').serialize());
+	$('#products-form-result').html('<center><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></center>');
+	$.ajax({
+		url: 'index.php?route=extension/module/hb_download/save_product&user_token={{ user_token }}',
+		type: 'post',
+		data: $('#form-product').serialize(),
+		dataType: 'json',
+		success: function(json) {
+			if (json['error']) {
+				$('#products-form-result').html('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+			if (json['success']) {
+				$('#products-form-result').html('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				//$('#products-modal').modal('hide');
+				loadBlock('list');
+			}
+		}
+	});
+}
+
+function deleteDownloads(){
+	console.log('deleteDownloads');
+	var selected = [];
+	var arraydata = $('input[name="selected[]"]:checked').map(function(){
+			return this.value;
+		}).get();
+	
+		$.ajax({
+			url: 'index.php?route=extension/module/hb_download/delete&user_token={{ user_token }}',
+			type: 'post',
+			data: {selected: arraydata},
+			dataType: 'json',
+			success: function(json) {
+				if (json['error']) {
+					$('#msgoutput').html('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+				if (json['success']) {
+					$('#msgoutput').html('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+					loadBlock('list');
+				}
+			}
+		});
+}
+
+$('#clear-ghost-files').on('click', function() {
+	$.ajax({
+		url: 'index.php?route=extension/module/hb_download/clear_ghost_files&user_token={{ user_token }}',
+		type: 'post',
+		dataType: 'json',
+		success: function(json) {
+			if (json['error']) {
+				$('#msgoutput').html('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+			if (json['success']) {
+				$('#msgoutput').html('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				loadBlock('ghost');
+			}
+		}
+	});
+});
+</script>
+
+{{ footer }}

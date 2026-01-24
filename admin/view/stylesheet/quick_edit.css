@@ -1,0 +1,68 @@
+.focusField{
+	border:solid 2px #73A6FF!important;
+	background:#EFF5FF!important;
+	color:#000;
+}
+
+.editable{
+	background:none;
+	color: #000;
+/*	border: none;*/
+    border:1px solid #eee;
+	cursor:pointer;
+	}
+
+.quick_edit_font{
+font-style: bold;
+	
+}
+.quick_edit_danger{
+	
+	color: #f56b6b !important;
+}
+
+.quick_decorate{
+	
+	text-decoration: line-through;
+}
+
+.product_name_edit {
+	min-width: 15px;
+}
+.desc_edit {
+	min-width: 100px;
+}
+.model_edit,
+.price_edit,
+.qty_edit,
+.status_edit,
+.sku_edit,
+.upc_edit,
+.ean_edit,
+.jan_edit,
+.isbn_edit,
+.mpn_edit,
+.location_edit,
+.subtract_edit,
+.requiresshipping_edit,
+.seokeyword_edit,
+.stock_status_edit,
+.date_avilable_edit,
+.dimension_edit,
+.length_edit,
+.weight_edit,
+.weight_class_edit,
+.sort_order_edit,
+.view_edit,
+.points_edit,
+.store_edit {
+	min-width: 10px;
+}
+.category_edit,
+.filter_edit,
+.download_edit,
+.manufacturer_edit,
+.related_prod_edit,
+.taxclass_edit {
+	min-width: 13px;
+}

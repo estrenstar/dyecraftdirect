@@ -1,0 +1,25 @@
+<table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+	<tbody>
+	 {% for product in products %}
+	 <tr>
+		<td style="font-size: 12px; text-align: center; padding: 7px;">{% if product.image %}
+		 <a href="{{ product.href }}"><img src="{{ product.image }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" /></a>
+		 {% endif %}</td>
+		<td style="font-size: 12px;	text-align: left; padding: 7px;"><a href="{{ product.href }}">{{ product.name }}</a> ({{ product.model }})
+		 {% if not product.stock %}
+		 <span class="text-danger">***</span>
+		 {% endif %}
+		 {% if product.option %}
+		 {% for option in product['option'] %}
+		 <br />
+		 <small>{{ option.name }}: {{ option.value }}</small>
+		 {% endfor %}
+		 {% endif %}
+		</td>
+		<td style="font-size: 12px; text-align: right; padding: 7px;">{{ product.price }}</td>
+		<td style="font-size: 12px;	text-align: center; padding: 7px;">x{{ product.quantity }}</td>
+		
+	 </tr>
+	 {% endfor %}
+	 </tbody>
+	 </table>

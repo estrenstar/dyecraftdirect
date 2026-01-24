@@ -1,0 +1,12 @@
+# Ignore image and cache directories
+/image/
+/cache/
+image/
+cache/
+**/cache/
+**/image/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Abandoned Cart Email [21xx]</name>
+    <version>{huntbee_version}</version>
+    <author>HuntBee OpenCart Services</author>
+    <link>https://www.huntbee.com</link>
+	<code>huntbee_abandoned_cart_ocmod</code>
+			
+	<file path="system/library/cart.php">
+			<operation>
+				<search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE customer_id = '0' AND date_added < DATE_SUB(NOW(), INTERVAL 1 HOUR)");]]></search>
+				<add position="replace"><![CDATA[
+				if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE customer_id = '0' AND date_added < DATE_SUB(NOW(), ".$this->config->get('hb_cart_clear_guest').")");
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE customer_id = '0' AND date_added < DATE_SUB(NOW(), ".$this->config->get('hb_cart_clear_guest').")");
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "cart_guest WHERE date_modified < DATE_SUB(NOW(), INTERVAL ".$this->config->get('hb_cart_inactive_guest')." MONTH)");
+				}else{
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE customer_id = '0' AND date_added < DATE_SUB(NOW(), INTERVAL 1 HOUR)");
+				}
+				]]></add>
+			</operation>
+			<operation>
+                <search><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "cart SET session_id = '" . $this->db->escape($this->session->getId()) . "' WHERE customer_id = '" . (int)$this->customer->getId() . "'");]]></search>
+                <add position="after"><![CDATA[
+                if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("UPDATE " . DB_PREFIX . "hb_cart SET session_id = '" . $this->db->escape($this->session->getId()) . "', date_added = now() WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+				}
+				]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE cart_id = '" . (int)$cart['cart_id'] . "'");]]></search>
+                <add position="after"><![CDATA[
+                if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE cart_id = '" . (int)$cart['cart_id'] . "'");
+				}
+				]]></add>
+            </operation>
+			
+	 		<operation>
+                <search><![CDATA[$this->db->query("INSERT " . DB_PREFIX . "cart SET customer_id = '" . (int)$this->customer->getId() . "', session_id = '" . $this->db->escape($this->session->getId()) . "', product_id = '" . (int)$product_id . "', recurring_id = '" . (int)$recurring_id . "', `option` = '" . $this->db->escape(json_encode($option)) . "', quantity = '" . (int)$quantity . "', date_added = NOW()");]]></search>
+                <add position="replace"><![CDATA[
+				$this->db->query("INSERT " . DB_PREFIX . "cart SET customer_id = '" . (int)$this->customer->getId() . "', session_id = '" . $this->db->escape($this->session->getId()) . "', product_id = '" . (int)$product_id . "', recurring_id = '" . (int)$recurring_id . "', `option` = '" . $this->db->escape(json_encode($option)) . "', quantity = '" . (int)$quantity . "', date_added = NOW()");
+				$last_id = $this->db->getLastId(); 
+				if ($this->config->get('hb_cart_status')) {
+				    $cart_currency = (isset($this->session->data['currency'])) ? $this->session->data['currency'] : $this->config-get('config_currency'); 
+				    $this->db->query("INSERT " . DB_PREFIX . "hb_cart SET cart_id = '".(int)$last_id."', customer_id = '" . (int)$this->customer->getId() . "', `ip` = '".$this->db->escape($_SERVER['REMOTE_ADDR'])."', store_id = '".(int)$this->config->get('config_store_id')."', session_id = '" . $this->db->escape($this->session->getId()) . "', product_id = '" . (int)$product_id . "', recurring_id = '" . (int)$recurring_id . "', `option` = '" . $this->db->escape(json_encode($option)) . "', quantity = '" . (int)$quantity . "', language_id = '" . (int)$this->config->get('config_language_id') . "', currency = '" . $this->db->escape($cart_currency) . "', date_added = NOW(), date_modified = NOW()");
+				}
+				]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "cart SET quantity = (quantity + " . (int)$quantity . ") WHERE customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "' AND product_id = '" . (int)$product_id . "' AND recurring_id = '" . (int)$recurring_id . "' AND `option` = '" . $this->db->escape(json_encode($option)) . "'");]]></search>
+                <add position="replace"><![CDATA[
+				$this->db->query("UPDATE " . DB_PREFIX . "cart SET quantity = (quantity + " . (int)$quantity . ") WHERE customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "' AND product_id = '" . (int)$product_id . "' AND recurring_id = '" . (int)$recurring_id . "' AND `option` = '" . $this->db->escape(json_encode($option)) . "'");
+				if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("UPDATE " . DB_PREFIX . "hb_cart SET quantity = (quantity + " . (int)$quantity . "), date_added = now() WHERE customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "' AND product_id = '" . (int)$product_id . "' AND recurring_id = '" . (int)$recurring_id . "' AND `option` = '" . $this->db->escape(json_encode($option)) . "'");
+				}
+				]]></add>
+            </operation>
+			
+            <operation>
+                <search><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "cart SET quantity = '" . (int)$quantity . "' WHERE]]></search>
+                <add position="before"><![CDATA[
+                if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("UPDATE " . DB_PREFIX . "hb_cart SET quantity = '" . (int)$quantity . "', date_added = now() WHERE cart_id = '" . (int)$cart_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+				}
+				]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE cart_id = '" . (int)$cart_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");]]></search>
+                <add position="before"><![CDATA[
+				if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE cart_id = '" . (int)$cart_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+				}
+				]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "cart WHERE customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");]]></search>
+                <add position="before"><![CDATA[
+				if ($this->config->get('hb_cart_status')) {
+				    $this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+				}
+				]]></add>
+            </operation>
+	</file>
+	
+	<file path="catalog/controller/checkout/success.php">
+	 		<operation>
+                <search><![CDATA[$this->cart->clear();]]></search>
+                <add position="replace"><![CDATA[
+                if ($this->config->get('hb_cart_status')) {
+    				if (isset($this->session->data['order_id'])) {
+    				    if (isset($this->session->data['hb_cart_log_id'])) {
+    				        $get_order_total = $this->db->query("SELECT `total` FROM `".DB_PREFIX."order` WHERE `order_id` = '".$this->session->data['order_id']."' LIMIT 1");
+        					$hb_total = (float)$get_order_total->row['total'];
+        				    $this->db->query("UPDATE " . DB_PREFIX . "hb_cart_log SET responded = '1', `totals` = '".(float)$hb_total."', `order_id` = '".(int)$this->session->data['order_id']."', date_modified = now() WHERE id = '" . (int)$this->session->data['hb_cart_log_id'] . "'");
+    						$this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE hb_cart_log_id = '" . (int)$this->session->data['hb_cart_log_id'] . "' ");
+        				    unset($this->session->data['hb_cart_log_id']);
+    				    }else{
+    				        $this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+    				    }
+    				}
+				}
+				$this->cart->clear();
+				]]></add>
+            </operation>
+	</file>
+	
+	<file path="catalog/controller/common/footer.php">	
+		<operation>
+			<search><![CDATA[$data['newsletter']]]></search>
+			<add position="after"><![CDATA[
+				if ($this->config->get('hb_cart_status')) {
+					$this->load->model('extension/module/hb_cart');
+					$this->model_extension_module_hb_cart->last_visited();
+				}
+				
+				if ($this->config->get('hb_cart_magnific_lib')) {
+            		$this->document->addScript('catalog/view/javascript/hb-cart/jquery.magnific-popup.min.js');
+            		$this->document->addStyle('catalog/view/javascript/hb-cart/magnific-popup.css');
+        		}
+        		
+        		if ($this->config->get('hb_cart_exit_pop')) {
+        		    $this->document->addStyle('catalog/view/javascript/hb-cart/popup-effect.css');
+        		    $data['hb_cart_popup'] = $this->load->controller('extension/module/hb_cart/popup');	
+        		}else{
+        		    $data['hb_cart_popup'] = '';
+        		}
+        		
+        		if ($this->config->get('hb_cart_status') and $this->config->get('hb_cart_enable') and $this->config->get('hb_cart_webrun_enable')) {
+            		$this->load->model('extension/module/hb_cart');
+            		$this->model_extension_module_hb_cart->auto();
+            	}
+			]]></add>
+		</operation>
+	</file>	
+	
+	<file path="catalog/view/theme/*/template/common/footer.tpl">
+	 		<operation>
+                <search><![CDATA[</body>]]></search>
+                <add position="before"><![CDATA[<?php echo $hb_cart_popup; ?>]]></add>
+            </operation>
+	</file>
+	
+	<file path="catalog/controller/common/header.php">	
+		<operation>
+			<search><![CDATA[$data['cart'] = $this->load->controller('common/cart');]]></search>
+			<add position="after"><![CDATA[
+			    if (!isset($this->request->cookie['hb_email']) and $this->customer->isLogged()){
+					$cookie_expiration_time = time() + (30 * 24 * 60 * 60);  // for 1 month
+					setcookie("hb_email", $this->customer->getEmail(), $cookie_expiration_time, "", "", "", "true"); 
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="admin/model/catalog/product.php">
+		<operation>
+			<search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "product WHERE]]></search>
+			<add position="before"><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE product_id = '" . (int)$product_id . "'");]]></add>
+		</operation>
+	</file>
+	
+	<file path="admin/model/customer/customer.php">
+		<operation>
+			<search><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");]]></search>
+			<add position="before"><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "hb_cart WHERE customer_id = '" . (int)$customer_id . "'");]]></add>
+		</operation>
+	</file>
+	
+	<file path="admin/view/template/common/menu.tpl">
+		<operation error="log">
+			<search><![CDATA[<li><a href="<?php echo $feed; ?>"><?php echo $text_feed; ?></a></li>]]></search>
+			<add position="after"><![CDATA[<li><a href="<?php echo $hb_cart_link; ?>">Abandoned Cart <span class="label label-danger"><?php echo $hb_cart_count; ?></span></a></li>]]></add>
+		</operation>
+	</file>
+	
+    <file path="admin/controller/common/header.php">
+		<operation>
+			<search><![CDATA[$data['logout']]]></search>
+			<add position="before"><![CDATA[
+			
+			if (file_exists(DIR_APPLICATION . 'model/extension/hbapps/hb_cart.php')) {
+				$this->load->model('extension/hbapps/hb_cart');
+				$data['hb_cart_count'] = $this->model_extension_hbapps_hb_cart->getTotalAbandonedCarts();
+			}else{
+				$data['hb_cart_count'] = 0;
+			}
+			
+			$data['hb_cart_link'] = $this->url->link('hbapps/hb_cart', 'token=' . $this->session->data['token'].'&store_id=0', true);
+			]]></add>
+		</operation>
+	</file>	
+	
+	 <file path="admin/view/template/common/header.tpl">
+		<operation>
+			<search><![CDATA[<ul class="nav pull-right">]]></search>
+			<add position="after"><![CDATA[
+			<li><a href="<?php echo $hb_cart_link; ?>"><i class="fa fa-shopping-cart fa-lg" style="color: #ff0000;"></i>&nbsp;<span class="label label-danger pull-left"><?php echo $hb_cart_count; ?></span></a></li>
+			]]></add>
+		</operation>
+	</file>	
+
+</modification>

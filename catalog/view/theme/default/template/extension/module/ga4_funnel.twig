@@ -1,0 +1,158 @@
+{% if measurement_id %}
+<!-- GA4 Full Funnel (Journal Compatible) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ measurement_id|e('js') }}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '{{ measurement_id|e('js') }}', { 'send_page_view': true });
+
+(function(){
+  var cfg = {
+    currency: {{ currency_code ? ('"'~currency_code~'"') : '"USD"' }},
+    userId: {{ (send_user_id and customer_id) ? customer_id : 'null' }},
+    debug: {{ debug ? 'true' : 'false' }},
+    journal: {{ journal ? 'true' : 'false' }}
+  };
+  if (cfg.userId) {
+    gtag('set', {'user_id': cfg.userId});
+  }
+  function log(){ if(cfg.debug && console){ console.log.apply(console, arguments);} }
+
+  // view_item on product page
+  {% if ga4_product %}
+  gtag('event', 'view_item', {
+    currency: cfg.currency,
+    value: {{ ga4_product.price }},
+    items: [{{ ga4_product|json_encode|raw }}]
+  });
+  log('GA4 view_item', {{ ga4_product|json_encode|raw }});
+  {% endif %}
+
+  // begin_checkout on checkout
+  {% if ga4_cart %}
+  gtag('event', 'begin_checkout', {
+    currency: '{{ ga4_cart.currency }}',
+    value: {{ ga4_cart.value }},
+    items: {{ ga4_cart.items|json_encode|raw }}
+  });
+  log('GA4 begin_checkout', {{ ga4_cart|json_encode|raw }});
+  {% endif %}
+
+  // purchase on success
+  {% if ga4_purchase %}
+  gtag('event', 'purchase', {
+    transaction_id: '{{ ga4_purchase.transaction_id }}',
+    affiliation: '{{ ga4_purchase.affiliation|e('js') }}',
+    value: {{ ga4_purchase.value }},
+    tax: {{ ga4_purchase.tax }},
+    shipping: {{ ga4_purchase.shipping }},
+    currency: '{{ ga4_purchase.currency }}',
+    coupon: '{{ ga4_purchase.coupon|e('js') }}',
+    items: {{ ga4_purchase.items|json_encode|raw }}
+  });
+  log('GA4 purchase', {{ ga4_purchase|json_encode|raw }});
+  {% endif %}
+
+  // Add to cart tracking: capture default OpenCart & Journal AJAX
+  (function(){
+    function parseQuery(qs){
+      var o = {}; if(!qs) return o;
+      if (typeof qs !== 'string') { return o; }
+      qs.split('&').forEach(function(p){
+        var kv = p.split('=');
+        if (kv.length >= 2) o[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('=').replace(/\+/g, ' '));
+      });
+      return o;
+    }
+
+    function fireAddToCart(product_id, qty){
+      var url = 'index.php?route=extension/module/ga4_funnel/product_json&product_id=' + encodeURIComponent(product_id) + '&quantity=' + (qty||1);
+      fetch(url, {credentials: 'same-origin'}).then(function(r){ return r.json(); }).then(function(j){
+        if (j && j.ok) {
+          gtag('event', 'add_to_cart', {
+            currency: cfg.currency,
+            value: (j.item.price || 0) * (j.item.quantity || 1),
+            items: [j.item]
+          });
+          log('GA4 add_to_cart', j.item);
+        } else {
+          log('GA4 add_to_cart fetch failed', product_id);
+        }
+      }).catch(function(e){ log('GA4 add_to_cart error', e); });
+    }
+
+    // jQuery ajaxSuccess hook (OpenCart / Journal)
+    (function hookJq(){
+      if (!window.jQuery) { return setTimeout(hookJq, 250); }
+      jQuery(document).ajaxSuccess(function(e, xhr, settings, data){
+        var u = settings && settings.url || '';
+        if (u.indexOf('route=checkout/cart/add') !== -1 || u.indexOf('route=journal3/checkout/cart/add') !== -1) {
+          var q = (typeof settings.data === 'string') ? settings.data : '';
+          var parsed = parseQuery(q);
+          var pid = parsed['product_id'] || parsed['productId'] || parsed['product_id[]'];
+          var qty = parsed['quantity'] || parsed['qty'] || 1;
+          if (pid) fireAddToCart(pid, qty);
+        }
+      });
+    })();
+
+    // Journal quick add buttons (fallback listener)
+    document.addEventListener('click', function(ev){
+      var t = ev.target;
+      if (!t) return;
+      var el = t.closest('[data-product-id]');
+      if (el && (t.matches('.btn-cart') || t.matches('[data-action="add-to-cart"]'))) {
+        var pid = el.getAttribute('data-product-id');
+        fireAddToCart(pid, 1);
+      }
+    }, true);
+
+  })();
+
+  // add_shipping_info / add_payment_info (best-effort)
+  (function(){
+    function payload(step, method){
+      var e = (step === 'shipping') ? 'add_shipping_info' : 'add_payment_info';
+      gtag('event', e, {
+        currency: cfg.currency,
+        items: {{ ga4_cart ? ga4_cart.items|json_encode|raw : '[]' }},
+        shipping_tier: step === 'shipping' ? method : undefined,
+        payment_type: step === 'payment' ? method : undefined
+      });
+      log('GA4 '+e, method);
+    }
+
+    // default checkout radios
+    document.addEventListener('change', function(ev){
+      var t = ev.target;
+      if (!t) return;
+      if (t.name === 'shipping_method') payload('shipping', t.value);
+      if (t.name === 'payment_method') payload('payment', t.value);
+    }, true);
+
+    // Journal 3 checkout: observe method selectors
+    if (cfg.journal) {
+      var observer = new MutationObserver(function(mutations){
+        mutations.forEach(function(m){
+          Array.prototype.forEach.call(m.addedNodes || [], function(n){
+            if (!(n instanceof Element)) return;
+            if (n.querySelectorAll) {
+              n.querySelectorAll('input[name="shipping_method"]').forEach(function(x){
+                x.addEventListener('change', function(){ payload('shipping', this.value); });
+              });
+              n.querySelectorAll('input[name="payment_method"]').forEach(function(x){
+                x.addEventListener('change', function(){ payload('payment', this.value); });
+              });
+            }
+          });
+        });
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+    }
+  })();
+
+})(); // end IIFE
+</script>
+<!-- / GA4 Full Funnel -->
+{% endif %}

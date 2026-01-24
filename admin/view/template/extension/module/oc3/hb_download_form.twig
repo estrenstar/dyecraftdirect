@@ -1,0 +1,79 @@
+<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-download" class="form-horizontal">
+	<div class="form-group required">
+	<label class="col-sm-2 control-label">{{ entry_name }}</label>
+	<div class="col-sm-10">
+		<input type="text" name="description" value="{{ description }}" placeholder="{{ entry_name }}" class="form-control" />
+		<input type="hidden" name="download_id" value="{{ download_id }}" />
+	</div>
+	</div>
+	<div class="form-group required">
+	<label class="col-sm-2 control-label" for="input-filename"><span data-toggle="tooltip" title="{{ help_filename }}">{{ entry_filename }}</span></label>
+	<div class="col-sm-10">
+		<div class="input-group">
+		<input type="text" name="filename" value="{{ filename }}" placeholder="{{ entry_filename }}" id="input-filename" class="form-control" />
+		<span class="input-group-btn">
+		<button type="button" id="button-upload" data-loading-text="{{ text_loading }}" class="btn btn-primary"><i class="fa fa-upload"></i> {{ button_upload }}</button>
+		</span> </div>
+	</div>
+	</div>
+	<div class="form-group required">
+	<label class="col-sm-2 control-label" for="input-mask"><span data-toggle="tooltip" title="{{ help_mask }}">{{ entry_mask }}</span></label>
+	<div class="col-sm-10">
+		<input type="text" name="mask" value="{{ mask }}" placeholder="{{ entry_mask }}" id="input-mask" class="form-control" />
+	</div>
+	</div>
+</form>
+
+<div id="upload-block"></div>
+
+
+<script type="text/javascript"><!--
+$('#button-upload').on('click', function() {
+	$('#form-upload').remove();
+
+	$('#upload-block').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=catalog/download/upload&user_token={{ user_token }}',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$('#button-upload').button('loading');
+				},
+				complete: function() {
+					$('#button-upload').button('reset');
+				},
+				success: function(json) {
+					if (json['error']) {
+						alert(json['error']);
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$('input[name=\'filename\']').val(json['filename']);
+						$('input[name=\'mask\']').val(json['mask']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+//--></script>

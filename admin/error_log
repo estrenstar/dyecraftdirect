@@ -1,0 +1,59 @@
+[31-Oct-2024 12:47:38 America/New_York] PHP Fatal error:  Uncaught Exception: Error: RCPT TO not accepted from server! in /home/ginger101/public_html/dyecraftdirect.com/system/library/mail/smtp.php:171
+Stack trace:
+#0 /home/ginger101/public_html/dyecraftdirect.com/system/library/mail.php(142): Mail\Smtp->send()
+#1 /home/ginger101/storage3040/modification/admin/controller/marketing/contact.php(236): Mail->send()
+#2 /home/ginger101/storage3040/modification/system/engine/action.php(79): ControllerMarketingContact->send()
+#3 /home/ginger101/public_html/dyecraftdirect.com/admin/controller/startup/router.php(26): Action->execute(Object(Registry), Array)
+#4 /home/ginger101/storage3040/modification/system/engine/action.php(79): ControllerStartupRouter->index()
+#5 /home/ginger101/storage3040/modification/system/engine/router.php(134): Action->execute(Object(Registry))
+#6 /home/ginger101/storage3040/modification/system/engine/router.php(123): Router->execute(Object(Action))
+#7 /home/ginger101/public_html/dyecraftdirect.com/system/framework.php(179): Router->dispatch(Object(Ac in /home/ginger101/public_html/dyecraftdirect.com/system/library/mail/smtp.php on line 171
+[23-Feb-2025 22:06:25 UTC] PHP Warning:  POST Content-Length of 74151585889 bytes exceeds the limit of 134217728 bytes in Unknown on line 0
+[27-Feb-2025 12:06:19 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:06:22 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:06:51 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:06:53 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:06:53 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:16 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:18 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:41 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:43 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:45 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:46 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:57 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:58 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:58 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:07:59 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:10:10 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:10:14 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:10:15 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 12:11:05 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:17 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:19 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:24 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:24 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:25 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:27 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:33 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:34 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:34 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:34 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:35 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:38:35 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[27-Feb-2025 13:39:11 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[01-Mar-2025 13:28:58 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:29:00 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:29:06 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:29:06 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:29:18 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:38:12 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:38:14 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:38:46 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:39:00 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:39:17 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[01-Mar-2025 13:42:20 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[02-Mar-2025 21:13:16 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 73728 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 47
+[03-Mar-2025 09:28:19 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[03-Mar-2025 09:28:57 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[03-Mar-2025 09:46:06 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45
+[03-Mar-2025 10:17:09 America/New_York] PHP Fatal error:  Allowed memory size of 67108864 bytes exhausted (tried to allocate 20480 bytes) in /home/ginger101/storage3040/modification/system/library/image.php on line 45

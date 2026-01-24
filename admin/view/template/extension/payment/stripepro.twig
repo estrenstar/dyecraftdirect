@@ -1,0 +1,288 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-stripepro" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i
+					class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		{% if success %}
+		<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-stripepro" class="form-horizontal">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+						<li><a href="#tab-test-account" data-toggle="tab">{{ tab_test_account }}</a></li>
+						<li><a href="#tab-live-account" data-toggle="tab">{{ tab_live_account }}</a></li>
+						<li><a href="#tab-order-status" data-toggle="tab">{{ tab_order_status }}</a></li>
+						<li><a href="#tab-vault" data-toggle="tab">{{ tab_vault }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-general">
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_entry_title">
+								<span data-toggle="tooltip" title="{{ entry_title_help }}">{{ entry_title }}</span>
+								</label>
+								<div class="col-sm-9">
+									{% for language in languages %}
+									<div class="input-group">
+										<span class="input-group-addon">
+											<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+										</span>
+										<input type="text" name="payment_stripepro_title[{{ language.language_id }}]" value="{{ payment_stripepro_title[language.language_id] }}" placeholder="{{ entry_title }}" class="form-control" />
+									</div>
+									{% if error_title[language.language_id] %}
+									<div class="text-danger">{{ error_title[language.language_id] }}</div>
+									{% endif %}
+								{% endfor %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_environment">
+								<span data-toggle="tooltip" title="{{ entry_environment_help }}">{{ entry_environment }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_environment" class="form-control">
+										{% if payment_stripepro_environment == 'test' %}
+										<option value="test" selected="selected">{{ text_test }}</option>
+										<option value="live">{{ text_live }}</option>
+										{% else %}
+										<option value="test">{{ text_test }}</option>
+										<option value="live" selected="selected">{{ text_live }}</option>
+										{% endif %}
+									</select>
+									<small class="text-info">{{ entry_environment_help }}</small>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_debug">
+								<span data-toggle="tooltip" title="{{ entry_debug_help }}">{{ entry_debug }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_debug" class="form-control">
+										{% if payment_stripepro_debug %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+									<small class="text-info">{{ entry_debug_help }}</small>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_status">
+								<span data-toggle="tooltip" title="{{ entry_status_help }}">{{ entry_status }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_status" class="form-control">
+										{% if payment_stripepro_status %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+									<small class="text-info">{{ entry_status_help }}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="payment_stripepro_sort_order">{{ entry_sort_order }}</label>
+								<div class="col-sm-9">
+									<input type="text" name="payment_stripepro_sort_order" value="{{ payment_stripepro_sort_order }}" placeholder="{{ entry_sort_order }}"
+										id="payment_stripepro_sort_order" class="form-control" />
+								</div>
+							</div>
+							<div class="row-fluid">
+								<div class="pull-right btn btn-primary" onclick="switchToNextTab(this);">{{ text_next }}</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-test-account">
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_test_public_key">
+								<span data-toggle="tooltip" title="{{ entry_test_public_key_help }}">{{ entry_test_public_key }}</span>
+								</label>
+								<div class="col-sm-9">
+									<input type="text" name="payment_stripepro_test_public_key" id="payment_stripepro_test_public_key" value="{{ payment_stripepro_test_public_key }}" class="form-control" />
+									<small class="text-info">{{ entry_test_public_key_help }}</small>
+									{% if error_test_public_key %}
+									<div class="text-danger">{{ error_test_public_key }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_test_secret_key">
+								<span data-toggle="tooltip" title="{{ entry_test_secret_key_help }}">{{ entry_test_secret_key }}</span>
+								</label>
+								<div class="col-sm-9">
+									<input type="text" name="payment_stripepro_test_secret_key" id="payment_stripepro_test_secret_key" value="{{ payment_stripepro_test_secret_key }}" class="form-control" />
+									<small class="text-info">{{ entry_test_secret_key_help }}</small>
+									{% if error_test_secret_key %}
+									<div class="text-danger">{{ error_test_secret_key }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="row-fluid">
+								<div class="pull-left btn btn-primary" onclick="switchToPreviousTab(this);">{{ text_back }}</div>
+								<div class="pull-right btn btn-primary" onclick="switchToNextTab(this);">{{ text_next }}</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-live-account">
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_live_public_key">
+								<span data-toggle="tooltip" title="{{ entry_live_public_key_help }}">{{ entry_live_public_key }}</span>
+								</label>
+								<div class="col-sm-9">
+									<input type="text" name="payment_stripepro_live_public_key" id="payment_stripepro_live_public_key" value="{{ payment_stripepro_live_public_key }}" class="form-control" />
+									<small class="text-info">{{ entry_live_public_key_help }}</small>
+									{% if error_live_public_key %}
+									<div class="text-danger">{{ error_live_public_key }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_live_secret_key">
+								<span data-toggle="tooltip" title="{{ entry_live_secret_key_help }}">{{ entry_live_secret_key }}</span>
+								</label>
+								<div class="col-sm-9">
+									<input type="text" name="payment_stripepro_live_secret_key" id="payment_stripepro_live_secret_key" value="{{ payment_stripepro_live_secret_key }}" class="form-control" />
+									<small class="text-info">{{ entry_live_secret_key_help }}</small>
+									{% if error_live_secret_key %}
+									<div class="text-danger">{{ error_live_secret_key }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="row-fluid">
+								<div class="pull-left btn btn-primary" onclick="switchToPreviousTab(this);">{{ text_back }}</div>
+								<div class="pull-right btn btn-primary" onclick="switchToNextTab(this);">{{ text_next }}</div>
+							</div>
+						</div>
+
+						<div class="tab-pane" id="tab-order-status">
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_order_success_status_id">
+								<span data-toggle="tooltip" title="{{ entry_order_success_status_help }}">{{ entry_order_success_status }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_order_success_status_id" id="payment_stripepro_order_success_status_id" class="form-control">
+										{% for order_status in order_statuses %}
+										{% if order_status['order_status_id'] == payment_stripepro_order_success_status_id %}
+										<option value="{{ order_status['order_status_id'] }}" selected="selected">{{ order_status['name'] }}</option>
+										{% else %}
+										<option value="{{ order_status['order_status_id'] }}">{{ order_status['name'] }}</option>
+										{% endif %}
+										{% endfor %}
+									</select>
+									<small class="text-info">{{ entry_order_success_status_help }}</small>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_order_failed_status_id">
+								<span data-toggle="tooltip" title="{{ entry_order_failed_status_help }}">{{ entry_order_failed_status }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_order_failed_status_id" id="payment_stripepro_order_failed_status_id" class="form-control">
+										{% for order_status in order_statuses %}
+										{% if order_status['order_status_id'] == payment_stripepro_order_failed_status_id %}
+										<option value="{{ order_status['order_status_id'] }}" selected="selected">{{ order_status['name'] }}</option>
+										{% else %}
+										<option value="{{ order_status['order_status_id'] }}">{{ order_status['name'] }}</option>
+										{% endif %}
+										{% endfor %}
+									</select>
+									<small class="text-info">{{ entry_order_failed_status_help }}</small>
+								</div>
+							</div>
+							<div class="row-fluid">
+								<div class="pull-left btn btn-primary" onclick="switchToPreviousTab(this);">{{ text_back }}</div>
+								<div class="pull-right btn btn-primary" onclick="switchToNextTab(this);">{{ text_next }}</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-vault">
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_store_card">
+								<span data-toggle="tooltip" title="{{ entry_store_card_help }}">{{ entry_store_card }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_store_card" class="form-control">
+										{% if payment_stripepro_store_card %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+									<small class="text-info">{{ entry_store_card_help }}</small>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="payment_stripepro_store_card_prechecked">
+								<span data-toggle="tooltip" title="{{ entry_store_card_prechecked_help }}">{{ entry_store_card_prechecked }}</span>
+								</label>
+								<div class="col-sm-9">
+									<select name="payment_stripepro_store_card_prechecked" class="form-control">
+										{% if payment_stripepro_store_card_prechecked %}
+										<option value="1" selected="selected">{{ text_enabled }}</option>
+										<option value="0">{{ text_disabled }}</option>
+										{% else %}
+										<option value="1">{{ text_enabled }}</option>
+										<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+									<small class="text-info">{{ entry_store_card_prechecked_help }}</small>
+								</div>
+							</div>
+							<div class="row-fluid">
+								<div class="pull-left btn btn-primary" onclick="switchToPreviousTab(this);">{{ text_back }}</div>
+								<button type="submit" form="form-stripepro" data-toggle="tooltip" title="" class="btn btn-primary pull-right">{{ text_save }}</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript"><!--
+	$(document).ready(function(){
+		var active_tab = $(".tab-pane .text-danger").eq(0).parents(".tab-pane").attr("id");
+		$("a[href='#"+active_tab+"'").trigger("click");
+	});
+	
+	function switchToPreviousTab(ele){
+		var tab_name = $(ele).parents('.tab-pane').prev().attr('id');
+		$('.nav-tabs a[href="#'+tab_name+'"]').tab('show');
+	}
+
+	function switchToNextTab(ele){
+		var tab_name = $(ele).parents('.tab-pane').next().attr('id');
+		$('.nav-tabs a[href="#'+tab_name+'"]').tab('show');
+	}
+	//-->
+</script>
+{{ footer }}

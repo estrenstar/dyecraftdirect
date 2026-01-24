@@ -1,0 +1,50 @@
+<div class="table-responsive">
+<table class="table table-bordered table-hover table-striped">
+	<thead>
+	<tr>
+		<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+		<td class="text-center">{{ column_download_id }}</td>
+		<td class="text-left col-sm-2">{{ column_name }}</td>
+		<td class="text-left col-sm-4">{{ column_product }}</td>
+		<td class="text-center">{{ column_download_count }}</td>
+		<td class="text-right">{{ column_date_added }}</td>
+		<td class="text-right">{{ column_date_modified }}</td>
+		<td class="text-right">{{ column_action }}</td>
+	</tr>
+	</thead>
+	<tbody>
+	{% if downloads %}
+	{% for download in downloads %}
+	<tr>
+		<td class="text-center"><input type="checkbox" name="selected[]" value="{{ download.download_id }}" /></td>
+		<td class="text-center">{{ download.download_id }}</td>
+		<td class="text-left">{{ download.name }}</td>
+		<td class="text-left">
+		<ol>
+		{% for product in download.products %}
+			<li>{{ product.name }} ({{ product.model }})</li>
+		{% endfor %}
+		</ol>
+		</td>
+		<td class="text-center">{{ download.download_count }}</td>
+		<td class="text-right">{{ download.date_added }}</td>
+		<td class="text-right">{{ download.date_modified }}</td>
+		<td class="text-right">
+			<a onclick="editDownload('{{ download.download_id }}')" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+			<a onclick="editProducts('{{ download.download_id }}')" data-toggle="tooltip" title="{{ button_link_products }}" class="btn btn-success"><i class="fa fa-link"></i></a>
+		</td>
+	</tr>
+	{% endfor %}
+	{% else %}
+	<tr>
+		<td class="text-center" colspan="6">{{ text_no_results }}</td>
+	</tr>
+	{% endif %}
+	</tbody>
+</table>
+</div>
+
+<div class="row">
+	<div class="col-sm-6 text-left">{{ pagination }}</div>
+	<div class="col-sm-6 text-right">{{ results }}</div>
+</div>

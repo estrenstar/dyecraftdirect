@@ -1,0 +1,392 @@
+.gmt-loader {
+	width: 20px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	border: 2px solid #1e91cf;
+	animation: l20-1 0.8s infinite linear alternate, l20-2 1.6s infinite linear;
+}
+
+@keyframes l20-1 {
+	0% {
+		clip-path: polygon(
+			50% 50%,
+			0 0,
+			50% 0%,
+			50% 0%,
+			50% 0%,
+			50% 0%,
+			50% 0%
+		);
+	}
+	12.5% {
+		clip-path: polygon(
+			50% 50%,
+			0 0,
+			50% 0%,
+			100% 0%,
+			100% 0%,
+			100% 0%,
+			100% 0%
+		);
+	}
+	25% {
+		clip-path: polygon(
+			50% 50%,
+			0 0,
+			50% 0%,
+			100% 0%,
+			100% 100%,
+			100% 100%,
+			100% 100%
+		);
+	}
+	50% {
+		clip-path: polygon(
+			50% 50%,
+			0 0,
+			50% 0%,
+			100% 0%,
+			100% 100%,
+			50% 100%,
+			0% 100%
+		);
+	}
+	62.5% {
+		clip-path: polygon(
+			50% 50%,
+			100% 0,
+			100% 0%,
+			100% 0%,
+			100% 100%,
+			50% 100%,
+			0% 100%
+		);
+	}
+	75% {
+		clip-path: polygon(
+			50% 50%,
+			100% 100%,
+			100% 100%,
+			100% 100%,
+			100% 100%,
+			50% 100%,
+			0% 100%
+		);
+	}
+	100% {
+		clip-path: polygon(
+			50% 50%,
+			50% 100%,
+			50% 100%,
+			50% 100%,
+			50% 100%,
+			50% 100%,
+			0% 100%
+		);
+	}
+}
+
+@keyframes l20-2 {
+	0% {
+		transform: scaleY(1) rotate(0deg);
+	}
+	49.99% {
+		transform: scaleY(1) rotate(135deg);
+	}
+	50% {
+		transform: scaleY(-1) rotate(0deg);
+	}
+	100% {
+		transform: scaleY(-1) rotate(-135deg);
+	}
+}
+
+#gmtOrders thead tr td {
+	font-weight: bold;
+}
+
+#gmtOrders thead tr td,
+#gmtOrders tbody tr td {
+	text-align: center;
+	vertical-align: middle;
+}
+
+#gmtOrders thead tr td:first-child {
+	max-width: 70px;
+}
+
+#gmtOrders thead tr td:nth-child(2) {
+	width: 70px;
+	max-width: 70px;
+}
+
+#gmtOrders thead tr td:nth-child(7) {
+	width: 100px;
+	max-width: 100px;
+}
+
+#gmtOrders thead td .hide_column {
+	display: none;
+}
+
+#gmtOrders tbody tr td:last-child {
+	min-width: 160px;
+	max-width: 165px;
+}
+
+#gmtOrders .order-actions {
+	text-align: center;
+}
+
+#gmtOrders .order-actions .btn {
+	width: 40px;
+	margin: 2px;
+	padding: 7px 11px;
+}
+
+#gmtOrders .order-actions .btn:focus {
+	outline: none;
+}
+
+#gmtOrders .order-actions .btn i {
+	margin-right: 0;
+}
+
+#gmtOrders .order-actions .gmt-loader {
+	width: 17px;
+	border-color: #fff;
+}
+
+#gmtOrders .consent-info {
+	text-align: center;
+	display: block;
+}
+
+#gmtOrders .consent-info i {
+	color: #a5a5a5;
+	margin-left: 3px;
+	margin-right: 0;
+}
+
+#gmtFilterOrders {
+	position: relative;
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+#gmtFilterOrders .btn-filter-orders {
+	margin-right: 5px;
+}
+
+#gmtFilterOrders button .fa {
+	margin-right: 5px;
+}
+
+#gmtFilterOrders .dropdown-menu {
+	padding: 15px;
+	width: 250px;
+}
+
+#gmtFilterOrders .dropdown-footer {
+	top: 15%;
+	position: relative;
+	margin: 10px;
+	text-align: center;
+}
+
+#gmtFilterOrders .dropdown-footer .btn {
+	width: 80%;
+}
+
+#gmtFilterOrders .filter-menu-title {
+	font-size: 13px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#gmtFilterOrders .filter-section {
+	margin-bottom: 10px;
+}
+
+#gmtFilterOrders .filter-title {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#gmtFilterOrders .filter-options {
+	display: flex;
+}
+
+#gmtFilterOrders .filter-date .filter-options {
+	flex-direction: column;
+	gap: 10px;
+}
+
+#gmtFilterOrders .filter-options input {
+	margin: 0 5px 0 0;
+}
+
+#gmtFilterOrders .filter-options label {
+	margin-right: 10px;
+}
+
+#gmtFilterOrders .filter-options .filter-date-wrap {
+	display: flex;
+	flex-direction: column;
+}
+
+.gmt-pagination {
+	margin: 0;
+	display: flex;
+	padding-left: 0;
+	list-style: none;
+	justify-content: flex-end;
+}
+
+.gmt-pagination .gmt-page-item:not(:first-child) {
+	margin-left: 2px;
+}
+
+.gmt-pagination .gmt-page-link {
+	width: 35px;
+	height: 35px;
+	position: relative;
+	display: block;
+	padding: 6px;
+	font-size: 1rem;
+	color: #1e91cf;
+	text-decoration: none;
+	background-color: #f8f9fa;
+	border: 1px solid #dee2e6;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+		border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.gmt-pagination .gmt-page-link.loading {
+	padding: 6px;
+}
+
+.gmt-pagination .gmt-page-link:hover {
+	z-index: 2;
+	color: #1874a6;
+	background-color: #f8f9fa;
+	border-color: #dee2e6;
+}
+
+.gmt-pagination .gmt-page-link:focus {
+	z-index: 3;
+	color: #1874a6;
+	background-color: #e9ecef;
+	outline: 0;
+	box-shadow: 0 0 0 0.25rem rgba(30, 145, 207, 0.25);
+}
+
+.gmt-pagination .gmt-page-link.active,
+.gmt-pagination .active > .gmt-page-link {
+	z-index: 3;
+	color: #fff;
+	background-color: #1e91cf;
+	border-color: #1e91cf;
+}
+
+.gmt-pagination .gmt-page-link.disabled,
+.disabled > .page-link {
+	color: rgba(33, 37, 41, 0.75);
+	pointer-events: none;
+	background-color: #e9ecef;
+	border-color: #dee2e6;
+}
+
+.gmt-order-info table tbody td {
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+/* jquery-confirm.js custom theme by Devman */
+.jconfirm.jconfirm-devman-light .jconfirm-bg,
+.jconfirm.jconfirm-devman-light-2 .jconfirm-bg {
+	background-color: #444;
+	opacity: 0.2;
+}
+
+.jconfirm.jconfirm-devman-light .jconfirm-box,
+.jconfirm.jconfirm-devman-light-2 .jconfirm-box {
+	-webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+}
+
+.jconfirm.jconfirm-devman-light
+	.jconfirm-box
+	.jconfirm-title-c
+	.jconfirm-icon-c,
+.jconfirm.jconfirm-devman-light-2
+	.jconfirm-box
+	.jconfirm-title-c
+	.jconfirm-icon-c {
+	margin-right: 8px;
+	margin-left: 0;
+}
+
+.jconfirm.jconfirm-devman-light .jconfirm-box .jconfirm-buttons {
+	float: right;
+}
+
+.jconfirm.jconfirm-devman-light-2 .jconfirm-box .jconfirm-buttons {
+	display: flex;
+	flex-direction: column;
+}
+
+.jconfirm.jconfirm-devman-light .jconfirm-box .jconfirm-buttons button,
+.jconfirm.jconfirm-devman-light-2 .jconfirm-box .jconfirm-buttons button {
+	text-transform: uppercase;
+	font-size: 14px;
+	font-weight: bold;
+	text-shadow: none;
+}
+
+.jconfirm.jconfirm-devman-light
+	.jconfirm-box
+	.jconfirm-buttons
+	button.btn-default,
+.jconfirm.jconfirm-devman-light-2
+	.jconfirm-box
+	.jconfirm-buttons
+	button.btn-default {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #333;
+}
+
+.jconfirm.jconfirm-devman-light
+	.jconfirm-box
+	.jconfirm-buttons
+	button.btn-default:hover,
+.jconfirm.jconfirm-devman-light-2
+	.jconfirm-box
+	.jconfirm-buttons
+	button.btn-default:hover {
+	background: #ddd;
+}
+
+.jconfirm.jconfirm-devman-light.jconfirm-rtl .jconfirm-title-c .jconfirm-icon-c,
+.jconfirm.jconfirm-devman-light-2.jconfirm-rtl
+	.jconfirm-title-c
+	.jconfirm-icon-c {
+	margin-left: 8px;
+	margin-right: 0;
+}
+
+.jconfirm .jconfirm-box .jconfirm-buttons button.btn-green-2 {
+	background-color: #20864b;
+	color: #fff;
+	text-shadow: none;
+	-webkit-transition: background 0.2s;
+	transition: background 0.2s;
+}
+.jconfirm .jconfirm-box .jconfirm-buttons button.btn-green-2:hover {
+	background-color: #1a6d3d;
+	color: #fff;
+}

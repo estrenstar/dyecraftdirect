@@ -1,0 +1,147 @@
+SETTING	NUMBER	SUB-SETTING	SUB-NUMBER	SUB-SUB-SETTING	VALUE
+autocomplete_preloading					0
+autosave					0
+cart_page_box					1
+charge	1	charges			-15%
+charge	1	coupon			WHITE
+charge	1	rule	1	comparison	not
+charge	1	rule	1	type	category
+charge	1	rule	1	value	UniSub Products [63]
+charge	1	rule	2	comparison	none
+charge	1	rule	2	type	product_group
+charge	1	rule	2	value	3
+charge	1	rule	3	comparison	not
+charge	1	rule	3	type	category
+charge	1	rule	3	value	Inks [24]
+charge	1	rule	4	comparison	not
+charge	1	rule	4	type	category
+charge	1	rule	4	value	Transfer Papers [67]
+charge	1	status			0
+charge	1	title_admin			WHITE
+charge	1	title_en-gb			15% discount
+charge	1	type			peritem
+charge	1	uses_per_coupon			
+charge	1	uses_per_customer			
+charge	2	charges			-100%
+charge	2	coupon			FREESHIP
+charge	2	rule	1	comparison	not
+charge	2	rule	1	type	category
+charge	2	rule	1	value	Transfer Papers [67]
+charge	2	rule	2	comparison	none
+charge	2	rule	2	type	product_group
+charge	2	rule	2	value	3
+charge	2	rule	3	comparison	not
+charge	2	rule	3	type	category
+charge	2	rule	3	value	Inks [24]
+charge	2	rule	4	comparison	not
+charge	2	rule	4	type	category
+charge	2	rule	4	value	HTV Vinyl [208]
+charge	2	status			1
+charge	2	title_admin			FREESHIP
+charge	2	title_en-gb			FREE SHIPPING
+charge	2	type			shipping_cost
+charge	2	uses_per_coupon			
+charge	2	uses_per_customer			
+charge	3	charges			-10%
+charge	3	coupon			RED
+charge	3	rule	1	comparison	cart
+charge	3	rule	1	type	total
+charge	3	rule	1	value	1.00 -100.00
+charge	3	rule	2	comparison	not
+charge	3	rule	2	type	product_group
+charge	3	rule	2	value	3
+charge	3	rule	3	comparison	not
+charge	3	rule	3	type	category
+charge	3	rule	3	value	UniSub Products [63]
+charge	3	status			0
+charge	3	title_admin			RED
+charge	3	title_en-gb			10% discount
+charge	3	type			peritem
+charge	3	uses_per_coupon			
+charge	3	uses_per_customer			
+charge	4	charges			-20%
+charge	4	coupon			SIZZLE
+charge	4	rule	1	comparison	cart
+charge	4	rule	1	type	total
+charge	4	rule	1	value	201.00
+charge	4	rule	2	comparison	none
+charge	4	rule	2	type	product_group
+charge	4	rule	2	value	3
+charge	4	rule	3	comparison	not
+charge	4	rule	3	type	manufacturer
+charge	4	rule	3	value	UniSub [13]
+charge	4	rule	4	comparison	not
+charge	4	rule	4	type	category
+charge	4	rule	4	value	UniSub Products [63]
+charge	4	rule	5	comparison	not
+charge	4	rule	5	type	category
+charge	4	rule	5	value	Inks [24]
+charge	4	rule	8	comparison	not
+charge	4	rule	8	type	category
+charge	4	rule	8	value	Sublimation Blanks &gt; Ornaments &gt; Metal Ornaments [283]
+charge	4	rule	9	comparison	not
+charge	4	rule	9	type	category
+charge	4	rule	9	value	Sublimation Blanks &gt; Ornaments &gt; Wood Ornaments [285]
+charge	4	status			0
+charge	4	title_admin			SIZZLE
+charge	4	title_en-gb			20% discount
+charge	4	type			peritem
+charge	4	uses_per_coupon			
+charge	4	uses_per_customer			
+charge	5	charges			-20.00
+charge	5	coupon			VD20
+charge	5	rule	1	comparison	not
+charge	5	rule	1	type	category
+charge	5	rule	1	value	Transfer Papers [67]
+charge	5	rule	2	comparison	none
+charge	5	rule	2	type	product_group
+charge	5	rule	2	value	3
+charge	5	rule	3	comparison	not
+charge	5	rule	3	type	category
+charge	5	rule	3	value	Inks [24]
+charge	5	rule	4	comparison	not
+charge	5	rule	4	type	category
+charge	5	rule	4	value	HTV Vinyl [208]
+charge	5	rule	5	comparison	not
+charge	5	rule	5	type	category
+charge	5	rule	5	value	Printers &gt; UNINET IColor Machines &gt; IColor &amp; Ink Toner [337]
+charge	5	status			1
+charge	5	title_admin			VD20
+charge	5	title_en-gb			-20.00
+charge	5	type			flat
+charge	5	uses_per_coupon			
+charge	5	uses_per_customer			
+check_for_updates					0
+coupon_box					1
+coupon_cleared_en-gb					Your coupon has been successfully cleared!
+display					expanded
+distance_calculation					driving
+distance_units					mi
+google_apikey					developer
+product_group	1	member	10		Sublimation Blanks &gt; Key Chains [category:219]
+product_group	1	member	11		Sublimation Blanks &gt; Pet Gifts [category:223]
+product_group	1	member	12		Sublimation Blanks [category:81]
+product_group	1	member	2		Sublimation Blanks &gt; Puzzles [category:258]
+product_group	1	member	3		Sublimation Blanks &gt; Business Supplies [category:216]
+product_group	1	member	4		Sublimation Blanks &gt; Ornaments &gt; Plastic Ornaments [category:286]
+product_group	1	member	5		Sublimation Blanks &gt; Ornaments &gt; Ceramic Ornaments [category:287]
+product_group	1	member	6		Sublimation Blanks &gt; Compact Mirrors [category:218]
+product_group	1	member	7		Sublimation Blanks &gt; Drinkables [category:85]
+product_group	1	member	8		Sublimation Blanks &gt; Fabrics [category:91]
+product_group	1	member	9		Sublimation Blanks &gt; Home Decor [category:204]
+product_group	1	name			Sublimation Blanks
+product_group	1	subcategories			0
+product_group	3	member	2		Transfer Papers [category:67]
+product_group	3	member	3		Equipment [category:70]
+product_group	3	member	4		HTV Vinyl [category:208]
+product_group	3	member	5		Inks [category:24]
+product_group	3	member	6		Printers [category:88]
+product_group	3	name			Exclude Equipment
+product_group	3	subcategories			1
+rule_set	2	name			
+sort_order					4
+status					1
+tax_class_id					0
+testing_mode					0
+tooltips					1
+unset_shipping					0

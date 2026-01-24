@@ -1,0 +1,33 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td style="padding: 5px 0 5px 0; font-size: 24px; line-height: 20px; font-weight: bold; color: #153643; font-family: sans-serif;">
+                <h2>It's in your cart! Don't forget!</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: 16px; line-height: 22px;">
+                <p>Dear {firstname},</p>
+                <p>We noticed that you have recently visited our website and we wouldn't want you to
+                    miss out on the items you have in your shopping cart. If you experienced any problems placing your order
+                    then please contact our customer care at {config_telephone}</p>
+                <p>{cart_items}</p>
+                <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table border="0" cellpadding="0" cellspacing="0"
+                    style="border-collapse:collapse!important;border:0px">
+                    <tbody>
+                        <tr>
+                            <td align="center" valign="middle" bgcolor="#{color3}"
+                                style="margin:0;height:40px;width:213px"><a href="{checkout}" style="background-color:#{color3};margin:0;text-decoration:none;text-transform:uppercase;font-family:'Roboto',Arial,sans-serif;font-weight:500;font-size:13px;color:#ffffff;display:inline-block"
+                                    target="_blank"> <span style="display:block;width:213px;line-height:40px">Complete Checkout</span> </a> <u></u> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

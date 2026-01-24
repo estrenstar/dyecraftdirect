@@ -1,0 +1,52 @@
+#tab-server-side .addon-container .fa {
+	margin: 0 !important;
+}
+
+.get-btn {
+	background-color: #ff0d4d;
+	color: white;
+	padding: 10px 30px;
+}
+
+.get-btn:hover,
+.get-btn:focus,
+.get-btn:focus-visible {
+	color: #fff;
+	background-color: #a70832;
+}
+
+.btn-setting {
+	color: #000;
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	margin-left: 5px;
+	padding: 10px 14px;
+}
+
+.btn-setting:hover,
+.btn-setting:focus,
+.btn-setting:focus-visible {
+	border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.addon-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	padding: 5px;
+	border: 1px solid #ddd;
+}
+
+.addon-list {
+	padding-left: 0px;
+}
+
+.addon-icon {
+	margin-top: 0px !important;
+}
+
+.name-icon-container {
+	display: flex;
+	align-items: center;
+	margin: 5px 0px;
+}

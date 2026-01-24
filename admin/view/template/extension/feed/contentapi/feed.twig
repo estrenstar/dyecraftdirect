@@ -1,0 +1,1326 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right form-inline">
+				<button type="submit" form="form-feed" name="apply" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-check"></i></button>
+				<button type="submit" form="form-feed" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		{% if monolog %}
+			<div class="alert alert-warning alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_monolog }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ success }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit_feed }} {{ label ? label : '' }}</h3>
+				<span class="pull-right"><a href="https://opencartbot.com/en/merchant" target="_blank"><kbd>opencartbot</kbd></a></span>
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab-main" data-toggle="tab">{{ tab_main }}</a></li>
+					<li><a href="#tab-shipping" data-toggle="tab">{{ tab_shipping }}</a></li>
+					<li><a href="#tab-filters" data-toggle="tab">{{ tab_filters }}</a></li>
+					<li><a href="#tab-blacklist" data-toggle="tab">{{ tab_blacklist }}</a></li>
+					<li><a href="#tab-update" data-toggle="tab">{{ tab_update }}</a></li>
+					<li><a href="#tab-cron" data-toggle="tab">{{ tab_cron }}</a></li>
+					<li><a href="#tab-log" data-toggle="tab">{{ tab_log }}</a></li>
+				</ul>
+				<form action="{{ save }}" method="post" enctype="multipart/form-data" id="form-feed" class="form-horizontal">
+					<div class="tab-content">
+						<div class="tab-pane active form-horizontal" id="tab-main">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<select name="status" id="input-status" class="form-control">
+										<option value="0" {{ "0" == status ? "selected" : "" }}>{{ text_disabled }}</option>
+										<option value="1" {{ "1" == status ? "selected" : "" }}>{{ text_enabled }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-store">{{ entry_store }}</label>
+								<div class="col-sm-10">
+									<select id="input-store" name="store_id" class="form-control">
+										<option value="0" {{ store_id == '0' ? 'selected' }}>{{ text_default }}</option>
+										{% for store in stores %}
+											<option value="{{ store.store_id }}" {{ store_id == store.store_id ? "selected" : "" }}>{{ store.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_label }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="label" value="{{ label }}" placeholder="{{ entry_label }}" class="form-control"/>
+									{% if error_label %}
+										<div class="text-danger">{{ error_label }}</div>
+									{% endif %}
+									<small>{{ help_label }}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-language">{{ entry_language }}</label>
+								<div class="col-sm-10">
+									<select id="input-language" name="language" class="form-control">
+										{% for language_code,language_data in languages %}
+											<option value="{{ language_data.language_id }}" {{ language_data.language_id == language ? "selected" : "" }}>{{ language_data.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-currency">{{ entry_currency }}</label>
+								<div class="col-sm-10">
+									<select name="currency" id="input-currency" class="form-control">
+										{% for currency_data in currencies %}
+											<option value="{{ currency_data.code }}" {{ currency_data.code == currency ? "selected" : "" }}>{{ currency_data.code }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_merchantid }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="merchantid" value="{{ merchantid }}" placeholder="{{ entry_merchantid }}" class="form-control"/>
+									{% if error_merchantid %}
+										<div class="text-danger">{{ error_merchantid }}</div>
+									{% endif %}
+									<small>{{ help_merchantid }}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-key"><span class="help" title="{{ help_key }}" data-toggle="tooltip">{{ entry_key }}</span></label>
+								<div class="col-sm-10">
+									<textarea name="key" placeholder="json" id="input-key" rows="6" class="form-control">{{ key }}</textarea>
+									<small>{{ help_key_manual }}</small>
+									{% if error_key %}
+										<div class="text-danger">{{ error_key }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_channel }}</label>
+								<div class="col-sm-10">
+									<select name="channel" id="input-channel" class="form-control">
+										<option value="online" {{ "online" == channel ? "selected" : "" }}>{{ text_online }}</option>
+										<option value="local" {{ "local" == channel ? "selected" : "" }}>{{ text_local }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-channel" data-parent-value="local">
+								<label class="col-sm-2 control-label">{{ entry_local_stores }}</label>
+								<div class="col-sm-10">
+									<table id="store-table" class="table table-striped table-bordered table-hover" style="background:#ffffff">
+										<thead>
+											<td>{{ entry_store_code }}</td>
+											<td></td>
+										</thead>
+										<tbody>
+											{% set store_row = 0 %}
+											{% if store_code %} 
+												{% for item in store_code %}
+												<tr id="store-row{{ store_row }}">
+													<td class="text-left">
+														<input type="text" name="store_code[{{ store_row }}]" value="{{ item }}" placeholder="{{ entry_store_code }}" class="form-control"/>
+													</td>
+													<td class="text-left">
+														<button type="button" onclick="$('#store-row{{ store_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+													</td>
+												</tr>
+												{% set store_row = store_row + 1 %} 
+												{% endfor %}  
+											{% endif %} 
+										</tbody>
+										<tfoot>
+											<tr>
+												<td></td>
+												<td class="text-left">
+													<button type="button" onclick="addStoreCode();" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+							<div class="form-group programs" data-parent-id="#input-channel" data-parent-value="online">
+								<label class="col-sm-2 control-label" for="input-destination">{{ entry_destination }}</label>
+								<div class="col-sm-5 programs-included">
+									<strong class="text-success">{{ entry_included }}</strong>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Shopping_ads" {{ "Shopping_ads" in destination ? "checked" : "" }}/> {{ text_Shopping_ads }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Display_ads" {{ "Display_ads" in destination ? "checked" : "" }}/> {{ text_Display_ads }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Free_listings" {{ "Free_listings" in destination ? "checked" : "" }}/> {{ text_Free_listings }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Cloud_retail" {{ "Cloud_retail" in destination ? "checked" : "" }}/> {{ text_Cloud_retail }}</label>
+									</div>
+								</div>
+								<div class="col-sm-5 programs-excluded">
+									<strong class="text-warning">{{ entry_excluded }}</strong>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Shopping_ads" {{ "Shopping_ads" in excluded ? "checked" : "" }}/> {{ text_Shopping_ads }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Display_ads" {{ "Display_ads" in excluded ? "checked" : "" }}/> {{ text_Display_ads }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Free_listings" {{ "Free_listings" in excluded ? "checked" : "" }}/> {{ text_Free_listings }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Cloud_retail" {{ "Cloud_retail" in excluded ? "checked" : "" }}/> {{ text_Cloud_retail }}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group programs" data-parent-id="#input-channel" data-parent-value="local">
+								<label class="col-sm-2 control-label" for="input-destination">{{ entry_destination }}</label>
+								<div class="col-sm-5 programs-included">
+									<strong class="text-success">{{ entry_included }}</strong>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Local_inventory_ads" {{ "Local_inventory_ads" in destination ? "checked" : "" }}/> {{ text_Local_inventory_ads }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Free_local_listings" {{ "Free_local_listings" in destination ? "checked" : "" }}/> {{ text_Free_local_listings }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="destination[]" value="Local_cloud_retail" {{ "Local_cloud_retail" in destination ? "checked" : "" }}/> {{ text_Local_cloud_retail }}</label>
+									</div>
+								</div>
+								<div class="col-sm-5 programs-excluded">
+									<strong class="text-warning">{{ entry_excluded }}</strong>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Local_inventory_ads" {{ "Local_inventory_ads" in excluded ? "checked" : "" }}/> {{ text_Local_inventory_ads }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Free_local_listings" {{ "Free_local_listings" in excluded ? "checked" : "" }}/> {{ text_Free_local_listings }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="excluded[]" value="Local_cloud_retail" {{ "Local_cloud_retail" in excluded ? "checked" : "" }}/> {{ text_Local_cloud_retail }}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-offerid">{{ entry_offerid }}</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon" style="padding:0;border:0;">
+											<input type="text" name="prefix" value="{{ prefix }}" placeholder="{{ entry_prefix }}" style="width:120px;" class="form-control"/>
+										</div>
+										<select name="offerid" id="input-offerid" class="form-control">
+											{% for field in fields %}
+											<option value="{{ field }}" {{ field == offerid ? "selected" : "" }}>{{ field }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-product-name">{{ entry_product_name }}</label>
+								<div class="col-sm-10">
+									<select name="product_name" id="input-product-name" class="form-control">
+										<option value="name" {{ "name" == product_name ? "selected" : "" }}>Name</option>
+										<option value="meta_title" {{ "meta_title" == product_name ? "selected" : "" }}>Meta Title</option>
+										<option value="meta_h1" {{ "meta_h1" == product_name ? "selected" : "" }}>H1</option>
+									</select>
+									<a class="add-field" data-field="add-prefix" style="cursor:pointer"><kbd>{{ entry_add_prefix }}</kbd></a>&nbsp;&nbsp;<a class="add-field" data-field="add-suffix" style="cursor:pointer"><kbd>{{ entry_add_suffix }}</kbd></a>
+									<div id="add-prefix" {{ name_prefix ? '' : 'style="display:none;"' }}>
+										<label class="control-label">{{ entry_name_prefix }}</label>
+										<input type="text" name="name_prefix" value="{{ name_prefix }}" placeholder="{{ entry_name_prefix }}" class="form-control"/>
+										<small>{{ entry_shortcodes }}</small>
+									</div>
+									<div id="add-suffix" {{ name_suffix ? '' : 'style="display:none;"' }}>
+										<label class="control-label">{{ entry_name_suffix }}</label>
+										<input type="text" name="name_suffix" value="{{ name_suffix }}" placeholder="{{ entry_name_suffix }}" class="form-control"/>
+										<small>{{ entry_shortcodes }}</small>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-product-name">{{ entry_product_description }}</label>
+								<div class="col-sm-10">
+									<select name="product_description" id="input-product-description" class="form-control">
+										<option value="description" {{ "description" == product_description ? "selected" : "" }}>Description</option>
+										<option value="meta_description" {{ "meta_description" == product_description ? "selected" : "" }}>Meta Description</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-striptags">{{ entry_striptags }}</label>
+								<div class="col-sm-10">
+									<select name="striptags" id="input-striptags" class="form-control">
+										<option value="0" {{ "0" == striptags ? "selected" : "" }}>{{ text_no }}</option>
+										<option value="1" {{ "1" == striptags ? "selected" : "" }}>{{ text_yes }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-gtin">{{ entry_gtin }}</label>
+								<div class="col-sm-10">
+									<select name="gtin" id="input-gtin" class="form-control">
+										<option value="0">{{ text_none }}</option>
+										<option value="no" {{ "no" == gtin ? "selected" : "" }}>{{ text_nogtin }}</option>
+										{% for field in fields %}
+											<option value="{{ field }}" {{ field == gtin ? "selected" : "" }}>{{ field }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-mpn">{{ entry_mpn }}</label>
+								<div class="col-sm-10">
+									<select name="mpn" id="input-mpn" class="form-control">
+										<option value="0">{{ text_none }}</option>
+										{% for field in fields %}
+											<option value="{{ field }}" {{ field == mpn ? "selected" : "" }}>{{ field }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-stock">{{ entry_stock }}</label>
+								<div class="col-sm-10">
+									<select name="stock" id="input-stock" class="form-control">
+										<option value="0" {{ "0" == stock ? "selected" : "" }}>{{ entry_always_available }}</option>
+										<option value="1" {{ "1" == stock ? "selected" : "" }}>{{ entry_always_preorder }}</option>
+										<option value="3" {{ "3" == stock ? "selected" : "" }}>{{ entry_quantity_based }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-stock" data-parent-value="3">
+								<label class="col-sm-2 control-label">{{ entry_stock_assign }}</label>
+								<div class="col-sm-10">
+									<table class="table table-bordered table-hover" style="background:#ffffff">
+										<thead>
+											<th>{{ entry_your_stock_status }}</th>
+											<th>{{ entry_default_stock_status }}</th>
+										</thead>
+										<tbody>
+											{% for stock_status in stock_statuses %}
+												<tr>
+													<td><strong>{{ stock_status.name }}</strong></td>
+													<td><select name="stock_assign[{{ stock_status.stock_status_id }}]" class="form-control">
+														{% for default_status in default_statuses %}
+															<option value="{{ default_status }}" {{ default_status == stock_assign[stock_status.stock_status_id] ? "selected" : "" }}>{{ attribute(_context, 'text_'~default_status) }}</option>
+														{% endfor %}
+													</select></td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_preorder }}</label>
+								<div class="col-sm-10">
+									<div class="input-group" style="max-width:300px">
+										<div class="input-group-addon"> + </div>
+										<input type="number" min="0" max="365" name="preorder" value="{{ preorder }}" placeholder="{{ entry_preorder }}" class="form-control"/>
+										<div class="input-group-addon">{{ text_days }}</div>
+									</div>
+									<small>{{ help_preorder }}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-condition">{{ entry_condition }}</label>
+								<div class="col-sm-10">
+									<select name="condition" id="input-condition" class="form-control">
+										<option value="0" {{ "0" == condition ? "selected" : "" }}>{{ entry_always_new }}</option>
+										<option value="1" {{ "1" == condition ? "selected" : "" }}>{{ entry_always_used }}</option>
+										<option value="2" {{ "2" == condition ? "selected" : "" }}>{{ entry_always_refurbished }}</option>
+										<option value="3" {{ "3" == condition ? "selected" : "" }}>{{ entry_product_status }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-condition" data-parent-value="3">
+								<label class="col-sm-2 control-label">{{ entry_condition_field }}</label>
+								<div class="col-sm-3">
+									<input type="text" name="condition_field" value="{{ condition_field }}" placeholder="{{ entry_condition_field }}" class="form-control"/>
+									<small>{{ text_eg }} upc</small>
+								</div>
+								<div class="col-sm-3">
+									<input type="text" name="condition_table" value="{{ condition_table }}" placeholder="{{ entry_condition_table }}" class="form-control"/>
+									<small>{{ text_eg }} oc_product</small>
+								</div>
+								<div class="col-sm-4">
+									{{ help_condition_field }}
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-condition" data-parent-value="3">
+								<label class="col-sm-2 control-label">{{ entry_condition_assign }}</label>
+								<div class="col-sm-10">
+									<table class="table table-bordered table-hover" style="background:#ffffff">
+										<thead>
+											<th>{{ entry_default_condition }}</th>
+											<th>{{ entry_field_value }}</th>
+										</thead>
+										<tbody>
+											{% for condition in default_conditions %}
+												<tr>
+													<td><strong>{{ attribute(_context, 'text_'~condition) }}</strong></td>
+													<td><input type="text" placeholder="{{ entry_field_value }}" name="condition_assign[{{ condition }}]" value="{{ condition_assign[condition] }}" class="form-control"></td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-dimension">{{ entry_dimension }}</label>
+								<div class="col-sm-10">
+									<select name="dimension" id="input-dimension" class="form-control">
+										<option value="0" {{ "0" == dimension ? "selected" : "" }}>{{ text_disabled }}</option>
+										<option value="1" {{ "1" == dimension ? "selected" : "" }}>{{ text_enabled }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-dimension" data-parent-value="1">
+								<label class="col-sm-2 control-label">{{ entry_dimension_assign }}</label>
+								<div class="col-sm-10">
+									<table class="table table-bordered table-hover" style="background:#ffffff">
+										<thead>
+											<th>{{ entry_in_store }}</th>
+											<th>{{ entry_multiplier }}</th>
+											<th>{{ entry_in_merchant }}</th>
+										</thead>
+										<tbody>
+											{% for class in length_classes %}
+												<tr>
+													<td><strong>{{ class['unit'] }}</strong></td>
+													<td><input type="text" placeholder="1" name="dimension_assign[{{ class['length_class_id'] }}][multiplier]" value="{{ dimension_assign[class['length_class_id']]['multiplier'] }}" class="form-control"></td>
+													<td>
+														<select name="dimension_assign[{{ class['length_class_id'] }}][unit]" class="form-control">
+															<option value="cm" {{ "cm" == dimension_assign[class['length_class_id']]['unit'] ? "selected" : "" }}>cm</option>
+															<option value="in" {{ "in" == dimension_assign[class['length_class_id']]['unit'] ? "selected" : "" }}>in</option>
+														</select>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-weight">{{ entry_weight }}</label>
+								<div class="col-sm-10">
+									<select name="weight" id="input-weight" class="form-control">
+										<option value="0" {{ "0" == weight ? "selected" : "" }}>{{ text_disabled }}</option>
+										<option value="1" {{ "1" == weight ? "selected" : "" }}>{{ text_enabled }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-weight" data-parent-value="1">
+								<label class="col-sm-2 control-label">{{ entry_weight_assign }}</label>
+								<div class="col-sm-10">
+									<table class="table table-bordered table-hover" style="background:#ffffff">
+										<thead>
+											<th>{{ entry_in_store }}</th>
+											<th>{{ entry_multiplier }}</th>
+											<th>{{ entry_in_merchant }}</th>
+										</thead>
+										<tbody>
+											{% for class in weight_classes %}
+												<tr>
+													<td><strong>{{ class['unit'] }}</strong></td>
+													<td><input type="text" placeholder="1" name="weight_assign[{{ class['weight_class_id'] }}][multiplier]" value="{{ weight_assign[class['weight_class_id']]['multiplier'] }}" class="form-control"></td>
+													<td>
+														<select name="weight_assign[{{ class['weight_class_id'] }}][unit]" class="form-control">
+															<option value="g" {{ "g" == weight_assign[class['weight_class_id']]['unit'] ? "selected" : "" }}>g</option>
+															<option value="kg" {{ "kg" == weight_assign[class['weight_class_id']]['unit'] ? "selected" : "" }}>kg</option>
+															<option value="lb" {{ "lb" == weight_assign[class['weight_class_id']]['unit'] ? "selected" : "" }}>lb</option>
+															<option value="oz" {{ "oz" == weight_assign[class['weight_class_id']]['unit'] ? "selected" : "" }}>oz</option>
+														</select>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_tracking }}</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon"> ? </div>
+										<input type="text" name="tracking" value="{{ tracking }}" placeholder="{{ entry_tracking }}" class="form-control"/>
+									</div>
+									<small>{{ entry_shortcodes }}</strong></small><br>
+									<small>{{ text_eg }} tracking={model} {{ text_or }} utm_source=GoogleMerchant&utm_medium=cpc&utm_content=product{product_id}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-product-type">{{ entry_product_type }}</label>
+								<div class="col-sm-10">
+									<select name="product_type" id="input-product-type" class="form-control">
+										<option value="0" {{ "0" == product_type ? "selected" : "" }}>{{ text_no }}</option>
+										<option value="1" {{ "1" == product_type ? "selected" : "" }}>{{ text_yes }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-include-tax">{{ entry_include_tax }}</label>
+								<div class="col-sm-10">
+									<select name="include_tax" id="input-include-tax" class="form-control">
+										<option value="0" {{ "0" == include_tax ? "selected" : "" }}>{{ text_no }}</option>
+										<option value="1" {{ "1" == include_tax ? "selected" : "" }}>{{ text_yes }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-adult">{{ entry_adult }}</label>
+								<div class="col-sm-10">
+									<select name="adult" id="input-adult" class="form-control">
+										<option value="0" {{ "0" == adult ? "selected" : "" }}>{{ text_no }}</option>
+										<option value="1" {{ "1" == adult ? "selected" : "" }}>{{ text_yes }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-settings">{{ entry_settings }}</label>
+								<div class="col-sm-10">
+									{% for item in settings_data %}
+									<div class="checkbox">
+										<label><input type="checkbox" name="settings[]" value="{{ item }}" {{ item in settings ? "checked" : "" }}> {{ attribute(_context, 'entry_'~item) }}</label>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-action">{{ entry_action }}</label>
+								<div class="col-sm-10">
+									<div class="checkbox">
+										<label><input type="checkbox" name="action[]" value="add_product" {{ "add_product" in action ? "checked" : "" }}/> {{ text_add_product }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="action[]" value="edit_product" {{ "edit_product" in action ? "checked" : "" }}/> {{ text_edit_product }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="action[]" value="delete_product" {{ "delete_product" in action ? "checked" : "" }}/> {{ text_delete_product }}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group custom-labels">
+								<label class="col-sm-2 control-label">{{ entry_custom_label }}</label>
+								<div class="col-sm-10">
+									<div class="row">
+									{% for num in 0..4 %}
+										<div class="col-sm-6" style="margin-bottom: 10px;">
+											<input type="text" name="custom_label[{{ num }}]" value="{{ custom_label[num] }}" placeholder="{{ entry_custom_label ~ num }}" class="form-control"/>
+										</div>
+									{% endfor %}
+									</div>
+									<small><strong>{{ help_custom_label }}</strong> {% for field in fields %}{{ '{'~field~'} ' }}{% endfor %}</small>
+								</div>
+							</div>
+							
+						</div>
+
+						<div class="tab-pane form-horizontal" id="tab-shipping">
+							<p class="alert alert-info"><i class="fa fa-info-circle"></i> {{ help_shipping }}</p>
+							<table id="shipping-table" class="table table-striped table-bordered table-hover">
+								<thead>
+									<td>{{ entry_country }}</td>
+									<td>{{ entry_shipping_service }}</td>
+									<td>{{ entry_shipping_price }}</td>
+									<td>{{ entry_shipping_upto }}</td>
+									<td>{{ entry_shipping_new_price }}</td>
+									<td></td>
+								</thead>
+								<tbody>
+									{% set shipping_row = 0 %}
+									{% if shipping %} 
+										{% for item in shipping %}
+										<tr id="shipping-row{{ shipping_row }}">
+											<td class="text-left">
+												<select name="shipping[{{ shipping_row }}][country]" class="form-control">
+													{% for country_code,country_name in countries %}
+														<option value="{{ country_code }}" {{ country_code == item.country ? "selected" : "" }}>{{ country_name }}</option>
+													{% endfor %}
+												</select>
+											</td>
+											<td class="text-left">
+												<input type="text" name="shipping[{{ shipping_row }}][service]" value="{{ item.service }}" placeholder="{{ entry_shipping_service }}" class="form-control"/>
+											</td>
+											<td class="text-left">
+												<input type="text" name="shipping[{{ shipping_row }}][price]" value="{{ item.price }}" placeholder="{{ entry_shipping_price }}" class="form-control"/>
+											</td>
+											<td class="text-right">
+												<div class="input-group">
+													<div class="input-group-addon" data-toggle="tooltip" title="{{ help_upto }}"><</div>
+													<input type="text" name="shipping[{{ shipping_row }}][upto]" value="{{ item.upto }}" placeholder="{{ entry_shipping_upto }}" class="form-control"/>
+													<div class="input-group-addon" data-toggle="tooltip" title="{{ help_afterto }}">></div>
+												</div>
+											</td>
+											<td class="text-left">
+												<input type="text" name="shipping[{{ shipping_row }}][new_price]" value="{{ item.new_price }}" placeholder="{{ entry_shipping_new_price }}" class="form-control"/>
+											</td>
+											<td class="text-left">
+												<button type="button" onclick="$('#shipping-row{{ shipping_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+											</td>
+										</tr>
+										{% set shipping_row = shipping_row + 1 %} 
+										{% endfor %}  
+									{% endif %} 
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="5"></td>
+										<td class="text-left">
+											<button type="button" onclick="addShipping();" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+							<p class="alert alert-info"><i class="fa fa-info-circle"></i> {{ help_weight_shipping }}</p>
+						</div>
+
+						<div class="tab-pane form-horizontal" id="tab-filters">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-select">{{ entry_select }}</label>
+								<div class="col-sm-10">
+									<div class="btn-group" data-toggle="buttons" id="input-select">
+										<label class="btn btn-default {{ 'all' == select ? 'active' : '' }}"><input type="radio" name="select" value="all" {{ "all" == select ? "checked" : "" }}/> {{ text_all_products }}</label>
+										<label class="btn btn-default {{ 'filter' == select ? 'active' : '' }}"><input type="radio" name="select" value="filter" {{ "filter" == select ? "checked" : "" }}/> {{ text_by_filters }}</label>
+										<label class="btn btn-default {{ 'products' == select ? 'active' : '' }}"><input type="radio" name="select" value="products" {{ "products" == select ? "checked" : "" }}/> {{ text_by_products }}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-select" data-parent-value="filter">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ entry_filter }}</label>
+										<div class="col-sm-5">
+											<label class="control-label" for="input-category">{{ entry_category }}</label>
+											<button type="button" onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="btn btn-xs btn-link">{{ text_select_all }}</button> / <button type="button" onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="btn btn-xs btn-link">{{ text_unselect_all }}</button>
+											<div class="well well-sm" style="height: 300px; overflow: auto;">
+												{% for category in categories %}
+													<div class="checkbox">
+														<label><input type="checkbox" name="category[]" value="{{ category.category_id }}"{% if category.category_id in category_selected %} checked="checked"{% endif %}>&nbsp;{{ category.name }}</label>
+													</div>
+												{% endfor %}
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<label class="control-label" for="input-manufacturer">{{ entry_manufacturer }}</label>
+											<button type="button" onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="btn btn-xs btn-link">{{ text_select_all }}</button> / <button type="button" onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="btn btn-xs btn-link">{{ text_unselect_all }}</button>
+											<div class="well well-sm" style="height: 300px; overflow: auto;">
+												{% for manufacturer in manufacturers %}
+													<div class="checkbox">
+														<label><input type="checkbox" name="manufacturer[]" value="{{ manufacturer.manufacturer_id }}"{% if manufacturer.manufacturer_id in manufacturer_selected %} checked="checked"{% endif %}>&nbsp;{{ manufacturer.name }}</label>
+													</div>
+												{% endfor %}
+											</div>
+										</div>
+										<div class="clearfix"></div>
+										<label class="col-sm-2 control-label" for="input-sub-category">{{ entry_sub_category }}</label>
+										<div class="col-sm-10">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="btn btn-default {{ '0' == sub_category ? 'active' : '' }}"><input type="radio" name="sub_category" value="0" {{ "0" == sub_category ? "checked" : "" }}/> {{ text_disabled }}</label>
+												<label class="btn btn-default {{ '1' == sub_category ? 'active' : '' }}"><input type="radio" name="sub_category" value="1" {{ "1" == sub_category ? "checked" : "" }}/> {{ text_enabled }}</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div id="filter" class="clearfix col-xs-12">
+											{% set param_row = 1 %}
+											{% for i, filter_o in filter %}
+												<div class="form-group" id="item_{{ i }}">
+													<label class="col-sm-2 control-label" for="filter_{{ i }}">
+													  {{ entry_option_name }}
+													</label>
+													<div class="col-sm-4">
+													  <select class="form-control opt" name="filter[{{ i }}]" id="filter_{{ i }}">
+														<option>{{ text_none }}</option>
+														{% for option in options %}
+														  <option value="{{ option.option_id }}" {{ filter_o == option.option_id ? 'selected' : '' }}>{{ option.name }}</option>
+														{% endfor %}
+													  </select>
+													</div>
+													<label class="col-sm-1 control-label" for="filterv_{{ i }}">
+													  {{ entry_option_value }}
+													</label>
+													<div class="col-sm-4">
+													  <select class="form-control optv" name="filterv[{{ i }}]" id="filterv_{{ i }}">
+														<option value="{{ filterv[i] }}">{{ filterv_name[i] }}</option>
+													  </select>
+													</div>
+													<div class="col-sm-1">
+													  <button type="button" class="btn btn-danger remove"><i class="fa fa-minus-circle"></i></button>
+													</div>
+												</div>
+												{% set param_row = param_row + 1 %}
+											{% endfor %}
+
+											{% for i, filter_a in filtera %}
+												<div class="form-group" id="item_{{ i }}">
+													<label class="col-sm-2 control-label" for="filter_{{ i }}">
+													  {{ entry_attribute_name }}
+													</label>
+													<div class="col-sm-4">
+													  <select class="form-control attr" name="filtera[{{ i }}]" id="filter_{{ i }}">
+														<option>{{ text_none }}</option>
+														{% for attribute in attributes %}
+														  <option value="{{ attribute.attribute_id }}" {{ filter_a == attribute.attribute_id ? 'selected' : '' }}>{{ attribute.name }}</option>
+														{% endfor %}
+													  </select>
+													</div>
+													<label class="col-sm-1 control-label" for="filterv_{{ i }}">
+													  {{ entry_attribute_value }}
+													</label>
+													<div class="col-sm-4">
+													  <input type="text" class="form-control attrv" name="filterva[{{ i }}]" id="filterv_{{ i }}" value="{{ filterva[i] }}">
+													</div>
+													<div class="col-sm-1">
+														<button type="button" class="btn btn-danger remove"><i class="fa fa-minus-circle"></i></button>
+													</div>
+												</div>
+												{% set param_row = param_row + 1 %}
+											{% endfor %}
+
+											{% for i, filter_f in filterf %}
+												<div class="form-group" id="item_{{ i }}">
+													<label class="col-sm-2 control-label" for="filterf_{{ i }}">
+													  {{ entry_filter_name }}
+													</label>
+													<div class="col-sm-4">
+													  <select class="form-control filterf" name="filterf[{{ i }}]" id="filterf_{{ i }}">
+														<option>{{ text_none }}</option>
+														{% for filter_g in filters %}
+														  <option value="{{ filter_g.filter_group_id }}" {{ filter_f == filter_g.filter_group_id ? 'selected' : '' }}>{{ filter_g.name }}</option>
+														{% endfor %}
+													  </select>
+													</div>
+													<label class="col-sm-1 control-label" for="filtervf_{{ i }}">
+													  {{ entry_filter_value }}
+													</label>
+													<div class="col-sm-4">
+													  <select class="form-control filtervf" name="filtervf[{{ i }}]" id="filtervf_{{ i }}">
+														<option value="{{ filtervf[i] }}">{{ filtervf_name[i] }}</option>
+													  </select>
+													</div>
+													<div class="col-sm-1">
+														<button type="button" class="btn btn-danger remove"><i class="fa fa-minus-circle"></i></button>
+													</div>
+												</div>
+												{% set param_row = param_row + 1 %}
+											{% endfor %}
+										</div>
+										<div class="col-sm-10 col-sm-offset-2">
+											<button type="button" class="btn btn-info" id="add_option">
+												<i class="fa fa-plus-square"></i>&nbsp;{{ entry_add_option }}
+											</button>&nbsp; &nbsp; &nbsp; &nbsp;
+											<button type="button" class="btn btn-info" id="add_attribute">
+												<i class="fa fa-plus-square"></i>&nbsp;{{ entry_add_attribute }}
+											</button>&nbsp; &nbsp; &nbsp; &nbsp;
+											<button type="button" class="btn btn-info" id="add_filter">
+												<i class="fa fa-plus-square"></i>&nbsp;{{ entry_add_filter }}
+											</button>
+										</div>
+									</div>
+									{% if supplers %}
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="input-suppler">{{ entry_suppler }}</label>
+										<div class="col-sm-10">
+											<select name="suppler" class="form-control">
+												<option value="">{{ text_none }}</option>
+												{% for suppler_item in supplers %}
+													{% if suppler_item.suppler_id %}
+													<option value="{{ suppler_item.suppler_id }}" {{ suppler_item.suppler_id == suppler ? "selected" : "" }}>{{ suppler_item.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group" data-parent-id="#input-select" data-parent-value="products">
+								<label class="col-sm-2 control-label" for="input-product">{{ entry_product }}</label>
+								<div class="col-sm-10">
+									<div>
+										<input type="text" name="product_autocomplete" value="" placeholder="{{ entry_product }}" id="input-product" class="form-control"/>
+										<div id="product-selected" class="well well-sm selected-items" style="height: 200px; overflow: auto;">
+											{% for item in product_selected %}
+												<div id="product-selected{{ item.product_id }}">
+													<i class="fa fa-minus-circle"></i> {{ item.name }}
+													<input type="hidden" name="product[]" value="{{ item.product_id }}"/>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >{{ entry_price_filter }}</label>
+								<div class="col-sm-10 form-inline">
+									<input type="text" name="price_from" value="{{ price_from }}" placeholder="{{ entry_price_from }}" id="input-price-from" class="form-control"/>
+									<label for="input-price-to"> - </label>
+									<input type="text" name="price_to" value="{{ price_to }}" placeholder="{{ entry_price_to }}" id="input-price-to" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_minimum }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="minimum" value="{{ minimum }}" placeholder="{{ entry_minimum }}" class="form-control"/>
+									<small>{{ help_minimum }}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-noimage">{{ entry_noimage }}</label>
+								<div class="col-sm-10">
+									<select name="noimage" id="input-noimage" class="form-control">
+										<option value="0" {{ "0" == noimage ? "selected" : "" }}>{{ text_not_upload }}</option>
+										<option value="1" {{ "1" == noimage ? "selected" : "" }}>{{ text_upload }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-pane form-horizontal" id="tab-blacklist">
+							<legend>{{ text_blacklist }}</legend>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-productbl">{{ entry_product }}</label>
+								<div class="col-sm-10">
+									<div>
+										<input type="text" name="productbl_autocomplete" value="" placeholder="{{ entry_product }}" id="input-productbl" class="form-control"/>
+										<div id="productbl-selected" class="well well-sm selected-items" style="height: 150px; overflow: auto;">
+											{% for item in productbl_selected %}
+												<div id="productbl-selected{{ item.product_id }}">
+													<i class="fa fa-minus-circle"></i> {{ item.name }}
+													<input type="hidden" name="productbl[]" value="{{ item.product_id }}"/>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<legend>{{ text_blacklist_and }}</legend>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_filter }}</label>
+								<div class="col-sm-5">
+									<label class="control-label" for="input-categorybl">{{ entry_category }}</label>
+									<div>
+										<input type="text" name="categorybl_autocomplete" value="" placeholder="{{ entry_category }}" id="input-categorybl" class="form-control"/>
+										<div id="categorybl-selected" class="well well-sm selected-items" style="height: 150px; overflow: auto;">
+											{% for item in categorybl_selected %}
+												<div id="categorybl-selected{{ item.category_id }}">
+													<i class="fa fa-minus-circle"></i> {{ item.name }}
+													<input type="hidden" name="categorybl[]" value="{{ item.category_id }}"/>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5">
+									<label class="control-label" for="input-manufacturerbl">{{ entry_manufacturer }}</label>
+									<div>
+										<input type="text" name="manufacturerbl_autocomplete" value="" placeholder="{{ entry_manufacturer }}" id="input-manufacturerbl" class="form-control"/>
+										<div id="manufacturerbl-selected" class="well well-sm selected-items" style="height: 150px; overflow: auto;">
+											{% for item in manufacturerbl_selected %}
+												<div id="manufacturerbl-selected{{ item.manufacturer_id }}">
+													<i class="fa fa-minus-circle"></i> {{ item.name }}
+													<input type="hidden" name="manufacturerbl[]" value="{{ item.manufacturer_id }}"/>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<label class="col-sm-2 control-label" for="input-sub-categorybl">{{ entry_sub_category }}</label>
+								<div class="col-sm-10">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="btn btn-default {{ '0' == sub_categorybl ? 'active' : '' }}"><input type="radio" name="sub_categorybl" value="0" {{ "0" == sub_categorybl ? "checked" : "" }}/> {{ text_disabled }}</label>
+										<label class="btn btn-default {{ '1' == sub_categorybl ? 'active' : '' }}"><input type="radio" name="sub_categorybl" value="1" {{ "1" == sub_categorybl ? "checked" : "" }}/> {{ text_enabled }}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-pane form-horizontal" id="tab-update">
+							<p class="alert alert-info"><i class="fa fa-info-circle"></i> {{ help_upload }}</p>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_limit }}</label>
+								<div class="col-sm-10">
+									<input type="number" min="1" name="limit" value="{{ limit }}" placeholder="{{ entry_limit }}" class="form-control"/>
+									<small>{{ help_limit }}</small>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_progress }}</label>
+								<div class="col-sm-10">
+									<input type="hidden" name="token" value="{{ update_token }}">
+									<div class="progress">
+										<div class="progress-bar progress-bar-striped active" id="progress-bar" role="progressbar"></div>
+									</div>
+									<a class="btn btn-lg btn-primary" id="updateCatalog" onclick="updateCatalog();" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {{ text_uploading }}" style="display:inline-block;float:left;margin-right:20px;">{{ button_update }}</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-pane form-horizontal" id="tab-cron">
+							<legend>{{ text_cron_all }}</legend>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_cron_link }}</label>
+								<div class="col-sm-10">
+									<div class="input-group"><div class="input-group-addon">wget</div><input value="{{ cron_all_link }}" readonly class="form-control"/></div>
+									<div class="input-group"><div class="input-group-addon">php cli</div><input value="{{ cron_all_cli }}" readonly class="form-control"/></div>
+									<small>{{ help_cron_all }}</small>
+								</div>
+							</div>
+							<legend>{{ text_cron }}</legend>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_cron_action }}</label>
+								<div class="col-sm-10">
+									<div class="checkbox">
+										<label><input type="checkbox" name="cron_action[]" value="add_product" {{ "add_product" in cron_action ? "checked" : "" }}/> {{ text_add_product }}</label>
+									</div>
+									<div class="checkbox">
+										<label><input type="checkbox" name="cron_action[]" value="edit_product" {{ "edit_product" in cron_action ? "checked" : "" }}/> {{ text_edit_product }}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-frequency">{{ entry_frequency }}</label>
+								<div class="col-sm-10">
+									<select name="frequency" id="input-frequency" class="form-control">
+										<option value="0" {{ "0" == frequency ? "selected" : "" }}>{{ text_hour }}</option>
+										<option value="1" {{ "1" == frequency ? "selected" : "" }}>{{ text_day }}</option>
+										<option value="2" {{ "2" == frequency ? "selected" : "" }}>{{ text_week }}</option>
+										<option value="3" {{ "3" == frequency ? "selected" : "" }}>{{ text_month }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_cron_link }}</label>
+								<div class="col-sm-10">
+									<div class="input-group"><div class="input-group-addon">wget</div><input value="{{ cron_link }}" readonly class="form-control"/></div>
+									<div class="input-group"><div class="input-group-addon">php cli</div><input value="{{ cron_cli }}" readonly class="form-control"/></div>
+									<small>{{ help_cron_all }}</small>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane form-horizontal" id="tab-log">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-debug">{{ entry_debug }}</label>
+								<div class="col-sm-10">
+									<select name="debug" id="input-debug" class="form-control">
+										<option value="0" {{ "0" == debug ? "selected" : "" }}>{{ text_disabled }}</option>
+										<option value="1" {{ "1" == debug ? "selected" : "" }}>{{ text_enabled }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-monolog">{{ entry_monolog }}</label>
+								<div class="col-sm-10">
+									<select name="monolog" id="input-monolog" class="form-control">
+										<option value="0" {{ "0" == monolog ? "selected" : "" }}>{{ text_disabled }}</option>
+										<option value="1" {{ "1" == monolog ? "selected" : "" }}>{{ text_enabled }}</option>
+									</select>
+									{{ help_monolog }}
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<textarea wrap="off" rows="20" readonly class="form-control">{{ log }}</textarea>
+								</div>
+							</div>
+							{% if clear %}
+								<div class="pull-right">
+									<a onclick="confirm('{{ text_confirm_log }}') ? location.href='{{ clear }}' : false;" data-toggle="tooltip" title="{{ button_clear }}" class="btn btn-danger"><i class="fa fa-eraser"></i> {{ entry_clear_log }}</a>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+#form-feed .btn.active {
+	color: #fff;
+	background-color: #1872a2;
+	border-color: #1872a2;
+}
+</style>
+<script type="text/javascript"><!--
+var bar = $('#progress-bar');
+
+function updateCatalog() {
+	bar.addClass('active').addClass('progress-bar-striped').removeClass('progress-bar-success');
+	bar.text('').css('width', '0%');
+	startUpload();
+}
+
+function startUpload(start = 0, total = 0, counter = 0) {
+	$.ajax({
+		url: '{{ server }}index.php?route=extension/feed/contentapi/updateCatalog&feed_id={{ feed_id }}&start=' + start + '&total=' + total + '&counter=' + counter,
+		type: 'post',
+		data: $('#tab-update input[type=\'hidden\']'),
+		dataType: 'json',
+		cache: false,
+		beforeSend: function() {
+			$('#updateCatalog').button('loading');
+			$('.alert-success').remove();
+		},
+		complete: function() {
+			$('#updateCatalog').button('reset');
+		},
+		success: function(result) {
+			bar.text(result['percent'] + '%').css('width', result['percent'] + '%');
+			if (parseInt(result['start']) < result['total']) {
+				setTimeout(function () {
+					startUpload(result['start'], result['total'], result['counter']);
+				}, 100);
+			} else {
+				bar.removeClass('active').removeClass('progress-bar-striped').addClass('progress-bar-success');
+				$('#updateCatalog').after('<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ text_product_count }} ' + result['counter'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+		}
+	});
+}
+
+function visibility(selector = '.form-group') {
+	$.each($(selector), function(index, item){
+		var parent = $(item).data('parent-id');
+		var value = $(item).data('parent-value');
+		if (parent) {
+			if ($(parent).val() == value || ($(parent + ' input:checked').val() == value && $(parent).is(':visible'))) {
+				$(item).css('background', '#e9f1fe').show(400);
+			} else {
+				$(item).hide(400);
+			}
+		}
+	});
+}
+
+$('.well.selected-items').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+$('input[name=\'product_autocomplete\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'product_autocomplete\']').val('')
+		$('#product-selected' + item['value']).remove();
+		$('#product-selected').append('<div id="product-selected' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+// Blacklist
+$('input[name=\'productbl_autocomplete\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'productbl_autocomplete\']').val('')
+		$('#productbl-selected' + item['value']).remove();
+		$('#productbl-selected').append('<div id="productbl-selected' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="productbl[]" value="' + item['value'] + '" /></div>');
+	}
+});
+	
+$('input[name=\'categorybl_autocomplete\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['category_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'categorybl_autocomplete\']').val('')
+		$('#categorybl-selected' + item['value']).remove();
+		$('#categorybl-selected').append('<div id="categorybl-selected' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="categorybl[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+$('input[name=\'manufacturerbl_autocomplete\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/manufacturer/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['manufacturer_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'manufacturerbl_autocomplete\']').val('')
+		$('#manufacturerbl-selected' + item['value']).remove();
+		$('#manufacturerbl-selected').append('<div id="manufacturerbl-selected' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="manufacturerbl[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+var shipping_row = {{ shipping_row }};
+function addShipping() {
+	html  = '<tr id="shipping-row' + shipping_row + '">';
+	html += '<td class="text-left">';
+		html += '<select name="shipping[' + shipping_row + '][country]" class="form-control">';
+			{% for country_code,country_name in countries %}
+				html += '<option value="{{ country_code }}">{{ country_name }}</option>';
+			{% endfor %}
+		html += '</select>';
+	html += '</td>';
+	html += '<td class="text-left">';
+		html += '<input type="text" name="shipping[' + shipping_row + '][service]" value="" placeholder="{{ entry_shipping_service }}" class="form-control"/>';
+	html += '</td>';
+	html += '<td class="text-left">';
+		html += '<input type="text" name="shipping[' + shipping_row + '][price]" value="" placeholder="{{ entry_shipping_price }}" class="form-control"/>';
+	html += '</td>';
+	html += '<td class="text-right">';
+		html += '<div class="input-group"><div class="input-group-addon"><</div><input type="text" name="shipping[' + shipping_row + '][upto]" value="" placeholder="{{ entry_shipping_upto }}" class="form-control"/><div class="input-group-addon">></div></div>';
+	html += '</td>';
+	html += '<td class="text-left">';
+		html += '<input type="text" name="shipping[' + shipping_row + '][new_price]" value="" placeholder="{{ entry_shipping_new_price }}" class="form-control"/>';
+	html += '</td>';
+	html += '<td class="text-left">';
+		html += '<button type="button" onclick="$(\'#shipping-row' + shipping_row + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+	html += '</td>';
+	html += '</tr>';
+	
+	$('#shipping-table tbody').append(html);
+	
+	shipping_row++;
+}
+
+var store_row = {{ store_row }};
+function addStoreCode() {
+	html  = '<tr id="store-row' + store_row + '">';
+	html += '<td class="text-left">';
+		html += '<input type="text" name="store_code[' + store_row + ']" value="" placeholder="{{ entry_store_code }}" class="form-control"/>';
+	html += '</td>';
+	html += '<td class="text-left">';
+		html += '<button type="button" onclick="$(\'#store-row' + store_row + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+	html += '</td>';
+	html += '</tr>';
+	
+	$('#store-table tbody').append(html);
+	
+	store_row++;
+}
+
+$(document).ready(function(){
+	setInterval('visibility()', 500);
+
+	$('.add-field').on('click', function(e){
+		e.preventDefault();
+		let fieldName = $(this).data('field');
+		$('#'+fieldName).toggle();
+		$('#'+fieldName+' input').val('');
+	});
+
+	var i = {{ param_row }}; 
+
+	// Options
+	$('#add_option').on('click', function(){
+	  let html = '';
+	  html = '<div class="form-group" id="item_'+i+'">';
+		html += '<label class="col-sm-2 control-label" for="filter_'+i+'">';
+		  html += '{{ entry_option_name }}';
+		html += '</label>';
+		html += '<div class="col-sm-4">';
+		  html += '<select class="form-control opt" name="filter['+i+']" id="filter_'+i+'">';
+			html += '<option>{{ text_none }}</option>';
+			{% for option in options %}
+			  html += `<option value="{{ option.option_id }}">{{ option.name }}</option>`;
+			{% endfor %}
+		  html += '</select>';
+		html += '</div>';
+		html += '<label class="col-sm-1 control-label" for="filterv_'+i+'">';
+		  html += '{{ entry_option_value }}';
+		html += '</label>';
+		html += '<div class="col-sm-4">';
+		  html += '<select class="form-control optv" name="filterv['+i+']" id="filterv_'+i+'">';
+			html += '<option>{{ text_none }}</option>';
+		  html += '</select>';
+		html += '</div>';
+		html += '<div class="col-sm-1">';
+		  html += '<button type="button" class="btn btn-danger remove"><i class="fa fa-minus-circle"></i></button>';
+		html += '</div>';
+	  html += '</div>';
+	  $('#filter').append(html);
+	  i++;
+	});
+
+	$(document).on('change', '.opt', function(){
+	  var option_id = $(this).val(),
+		row_id = $(this).attr('id'),
+		row_arr = row_id.split('_'),
+		row_num = row_arr[1],
+		opt_name = $("#filter_"+row_num+" option:selected").text();
+	  $("#filterv_"+row_num).empty();
+	  $.ajax({
+		url: 'index.php?route=catalog/option/autocomplete&user_token={{ user_token }}&filter_name='+opt_name,
+		dataType: 'json',
+		success: function(json) {
+		  for (value in json){
+			if (json[value]['option_id'] == option_id){
+			  for (item in json[value]['option_value']){
+				$("#filterv_"+row_num).append('<option value="'+json[value]['option_value'][item]['option_value_id']+'">'+json[value]['option_value'][item]['name']+'</option>');
+			  }
+			}
+		  }
+		}
+	  });
+	});
+
+	// Attributes
+	$('#add_attribute').on('click', function(){
+	  let html = '';
+	  html = '<div class="form-group" id="item_'+i+'">';
+		html += '<label class="col-sm-2 control-label" for="filter_'+i+'">';
+		  html += '{{ entry_attribute_name }}';
+		html += '</label>';
+		html += '<div class="col-sm-4">';
+		  html += '<select class="form-control attr" name="filtera['+i+']" id="filter_'+i+'">';
+			html += '<option>{{ text_none }}</option>';
+			{% for attribute in attributes %}
+			  html += `<option value="{{ attribute.attribute_id }}">{{ attribute.name }}</option>`;
+			{% endfor %}
+		  html += '</select>';
+		html += '</div>';
+		html += '<label class="col-sm-1 control-label" for="filterv_'+i+'">';
+		  html += '{{ entry_attribute_value }}';
+		html += '</label>';
+		html += '<div class="col-sm-4">';
+		  html += '<input type="text" class="form-control attrv" name="filterva['+i+']" id="filterv_'+i+'">';
+		html += '</div>';
+		html += '<div class="col-sm-1">';
+		  html += '<button type="button" class="btn btn-danger remove"><i class="fa fa-minus-circle"></i></button>';
+		html += '</div>';
+	  html += '</div>';
+	  $('#filter').append(html);
+	  i++;
+	});
+
+	// Filters
+	$('#add_filter').on('click', function(){
+	  let html = '';
+	  html = '<div class="form-group" id="item_'+i+'">';
+		html += '<label class="col-sm-2 control-label" for="filterf_'+i+'">';
+		  html += '{{ entry_filter_name }}';
+		html += '</label>';
+		html += '<div class="col-sm-4">';
+		  html += '<select class="form-control filter" name="filterf['+i+']" id="filterf_'+i+'">';
+			html += '<option>{{ text_none }}</option>';
+			{% for filter_g in filters %}
+			  html += `<option value="{{ filter_g.filter_group_id }}">{{ filter_g.name }}</option>`;
+			{% endfor %}
+		  html += '</select>';
+		html += '</div>';
+		html += '<label class="col-sm-1 control-label" for="filtervf_'+i+'">';
+		  html += '{{ entry_filter_value }}';
+		html += '</label>';
+		html += '<div class="col-sm-4">';
+		  html += '<select class="form-control filtervf" name="filtervf['+i+']" id="filtervf_'+i+'">';
+			html += '<option>{{ text_none }}</option>';
+		  html += '</select>';
+		html += '</div>';
+		html += '<div class="col-sm-1">';
+		  html += '<button type="button" class="btn btn-danger remove"><i class="fa fa-minus-circle"></i></button>';
+		html += '</div>';
+	  html += '</div>';
+	  $('#filter').append(html);
+	  i++;
+	});
+
+	$(document).on('change', 'select.filter', function(){
+	  var filter_group_id = $(this).val(),
+		row_id = $(this).attr('id'),
+		row_arr = row_id.split('_'),
+		row_num = row_arr[1];
+	  $("#filtervf_"+row_num).empty();
+	  $.ajax({
+		url: 'index.php?route=extension/feed/contentapi/getFilters&user_token={{ user_token }}&filter_group_id='+filter_group_id,
+		dataType: 'json',
+		success: function(json) {
+		  json.forEach(function(value, index) {
+			$("#filtervf_"+row_num).append('<option value="'+value['filter_id']+'">'+value['name']+'</option>');
+		  });
+		}
+	  });
+	});
+
+	// Removing
+	$(document).on('click','.remove', function(){
+	  $(this).closest('.form-group').remove();
+	});
+
+	// Programs
+	$(".programs .checkbox input").change(function() {
+		if(this.checked) {
+			if ($(this).attr('name') == 'destination[]') {
+				$(".programs-excluded .checkbox input[value='"+$(this).val()+"']").prop( "checked", false );
+			} else {
+				$(".programs-included .checkbox input[value='"+$(this).val()+"']").prop( "checked", false );
+			}
+		}
+	});
+
+});
+//--></script>
+{{ footer }}

@@ -1,0 +1,4 @@
+[05-Feb-2025 16:29:17 UTC] PHP Fatal error:  Uncaught Error: Class 'Controller' not found in /home/ginger101/public_html/dyecraftdirect.com/admin/controller/catalog/quick_product.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/ginger101/public_html/dyecraftdirect.com/admin/controller/catalog/quick_product.php on line 3

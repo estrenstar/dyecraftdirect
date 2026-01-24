@@ -1,0 +1,176 @@
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.bootstrap3.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<style>
+  .admin_filters td{font-weight:normal !important}
+  .admin_filters input,.extraFilters input{position:relative}
+  .daterangepicker {box-shadow: 0px 0px 15px;}
+  .extraFilters{display:flex; flex-wrap: wrap; gap: 20px; justify-content:space-around_; padding-left: 35px; font-weight:normal!important;}
+  .extraFilters label{font-weight:600;}
+  .extraFilters > div{border:0!important;  flex-basis: 20%;}
+  .extraFilters .btn-group{white-space:nowrap;}
+  .extraFilters .btn-group .btn {float:none; display:inline-block;}
+  .noborder td{border-bottom-width:1px!important;}
+</style>
+<script type="text/javascript">
+$("#button-extra-filter").on("click",function(e) {
+  $(this).find("i").toggleClass("fa-caret-down").toggleClass("fa-caret-up");
+  $(".extraFilters").slideToggle("fast",function() {
+    $(".extraFilters").parent().parent().toggleClass("noborder");
+  });
+});
+
+$(".admin_filters,.extraFilters").on("keypress",function(e) {
+  if (e.which == 13) {
+    e.preventDefault();
+    $("#button-filter").trigger("click");
+  }
+});
+
+$(".admin_filters select,.extraFilters select").on("change",function(e) {
+  $("#button-filter").trigger("click");
+});
+
+$(".gkdDatePicker").daterangepicker({
+autoUpdateInput: false,
+ranges: {
+    "Today": [moment(), moment()],
+    "Yesterday": [moment().subtract(1, "days"), moment().subtract(1, "days")],
+    "Last 7 Days": [moment().subtract(6, "days"), moment()],
+    "Last 30 Days": [moment().subtract(29, "days"), moment()],
+    "This Month": [moment().startOf("month"), moment().endOf("month")],
+    "Last Month": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+},
+"locale": {
+    "format": "DD/MM/YYYY",
+    "separator": " - ",
+    "applyLabel": "Apply",
+    "cancelLabel": "Clear",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "customRangeLabel": "Custom",
+    "weekLabel": "W",
+    "daysOfWeek": [
+        "Su",
+        "Mo",
+        "Tu",
+        "We",
+        "Th",
+        "Fr",
+        "Sa"
+    ],
+    "monthNames": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ],
+    "firstDay": 1
+},
+"linkedCalendars": false,
+"showCustomRangeLabel": false,
+"alwaysShowCalendars": true,
+//"minDate": "27/06/2024",
+"maxDate": "'.date('d/m/Y').'",
+"opens": "left"
+});
+
+$(".gkdDatePicker").on("apply.daterangepicker", function(ev, picker) {
+  if (picker.startDate.format("DD/MM/YYYY") == picker.endDate.format("DD/MM/YYYY")) {
+    $(this).val(picker.startDate.format("DD/MM/YYYY"));        
+  } else {
+    $(this).val(picker.startDate.format("DD/MM/YYYY") + " - " + picker.endDate.format("DD/MM/YYYY"));
+  }
+});
+
+$(".gkdDatePicker").on("cancel.daterangepicker", function(ev, picker) {
+  $(this).val("");
+});
+
+$("input[name='filter_order_id']").autocomplete({
+  'source': function(request, response) {
+    $.ajax({
+      url: 'index.php?route=tool/admin_filters/autocomplete_order_id&{{ token }}&q=' +  encodeURIComponent(request),
+      dataType: 'json',
+      success: function(json) {
+        response($.map(json, function(item) {
+          return item;
+        }));
+      }
+    });
+  },
+  'select': function(item) {
+    location = item['link'];
+    //$("input[name='filter_order_id']").val(item['value']);
+  }
+});
+
+$("input[name='filter_customer']").autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+      url: 'index.php?route=tool/admin_filters/autocomplete_customer&{{ token }}&q=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return item;
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+    location = item['link'];
+		//$('input[name='filter_customer']').val(item['value']);
+	}
+});
+
+$("input[name='filter_manufacturer']").autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+      url: 'index.php?route=tool/admin_filters/autocomplete_manufacturer&{{ token }}&q=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return item;
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+    //location = item['link'];
+    $("input[name='filter_manufacturer']").val(item['value']);
+    $("#button-filter").trigger("click");
+	}
+});
+
+$("input[name='filter_category']").autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+      url: 'index.php?route=tool/admin_filters/autocomplete_category&{{ token }}&q=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return item;
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+    //location = item['link'];
+		$("input[name='filter_category']").val(item['value']);
+    $("#button-filter").trigger("click");
+	}
+});
+
+$('.gkdSelect').selectize();
+</script>

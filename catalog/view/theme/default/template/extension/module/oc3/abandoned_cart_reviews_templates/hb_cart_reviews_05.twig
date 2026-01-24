@@ -1,0 +1,22 @@
+{% if reviews %}
+
+<h3 style="line-height:29px; font-size:18px; color:#00263f; text-align: left; margin-bottom:20px;">{{ text_reviews }}</h3>
+
+<table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+ <tbody>
+  {% for review in reviews %}
+  <tr style="margin-bottom: 20px;">
+   <td> 
+    <span style="font-size: 12px; text-align: left; margin-bottom: 10px; line-height: 18px;">{{ review.text }}</span><br />
+    <span style="font-size: 12px; text-align: left; color:#4285F4; line-height: 25px;">- {{ review.author }}</span><br /><br />
+   </td>
+
+   <td style="font-size: 12px; text-align: right; margin-bottom: 10px;" valign="top">
+    <img src="{{ https_server }}image/catalog/hb_cart/stars-2-{{ review.rating }}.png" alt="rating" style="display:block;border:0;outline:none;text-decoration:none;"><br />
+   </td>
+   
+  </tr>
+  {% endfor %}
+ </tbody>
+</table>
+{% endif %}

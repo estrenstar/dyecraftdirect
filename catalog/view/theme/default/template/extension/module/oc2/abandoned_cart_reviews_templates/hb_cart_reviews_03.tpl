@@ -1,0 +1,19 @@
+<?php if (!empty($reviews)) { ?>
+<h3 style="line-height:29px; font-size:18px; color:#00263f; text-align: left; margin-bottom:20px;">
+  <?php echo $text_reviews; ?>
+</h3>
+<table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+  <tbody>
+    <?php foreach ($reviews as $review) { ?>
+    <tr style="margin-bottom: 20px;">
+      <td style="font-size: 12px;	text-align: center; padding: 7px; max-width:56px" valign="top"><img src="<?php echo $https_server; ?>image/catalog/hb_cart/44301521732133350.png" alt="" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"></td>
+      <td style="font-size: 12px; text-align: left; padding: 7px; margin-bottom: 10px;" valign="top">
+        <img src="<?php echo $https_server; ?>image/catalog/hb_cart/stars-<?php echo $review['rating']; ?>.png" alt="rating" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"><br />
+        <span style="font-size: 12px; text-align: left; margin-bottom: 10px;"><?php echo $review['text']; ?></span><br /><br />
+        <span style="font-size: 12px; text-align: left; color:#4285F4;">-<?php echo $review['author']; ?></span><br />
+      </td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php } ?>

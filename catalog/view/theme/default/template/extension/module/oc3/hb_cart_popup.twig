@@ -1,0 +1,11 @@
+{% if (exit_intent) %} 
+<div id="hb-cart-popup-block" class="hbcart-white-popup  mfp-with-anim mfp-hide">
+	<div class="hbcart-content">
+  		{{ html }} 
+	</div>
+</div> 
+
+<script type="text/javascript">
+function addEvent(e,t,n){e.addEventListener?e.addEventListener(t,n,!1):e.attachEvent&&e.attachEvent("on"+t,n)}addEvent(document,"mouseout",function(e){if(null===e.toElement&&null===e.relatedTarget&&!localStorage.getItem("exitintent_show")&&($.magnificPopup.open({items:{src:"#hb-cart-popup-block"},type:"inline",removalDelay:500,mainClass:"mfp-3d-unfold"}),localStorage.setItem("exitintent_show","true"),window.performance)){var t=Math.round(performance.now());gtag("event","timing_complete",{name:"load",value:t,event_category:"JS Dependencies",event_label:"Huntbee Exit Intent"}){{ '}}' }});
+</script>
+{% endif %}
