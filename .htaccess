@@ -24,6 +24,21 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
+# ============================================
+# PHP CONFIGURATION - Fix 5xx Errors
+# ============================================
+<IfModule mod_php.c>
+	php_value memory_limit 512M
+	php_value max_execution_time 300
+	php_value max_input_time 300
+	php_value upload_max_filesize 100M
+	php_value post_max_size 100M
+	php_flag short_open_tag On
+	php_flag display_errors Off
+	php_flag log_errors On
+	php_value error_log /var/log/php_errors.log
+</IfModule>
+
 # If your opencart installation does not run in the main web folder make sure the following is set to the folder it does run in, i.e. / becomes /shop/
 RewriteBase /
 

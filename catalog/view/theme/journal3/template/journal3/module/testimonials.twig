@@ -2,7 +2,7 @@
   {% import _self as self %}
   <div class="block-body">
     {% if item.header == 'image' %}
-      <div class="block-header"><img src="{{ item.image }}" alt="" class="block-image" width="{{ context.imageDimensions.width }}" height="{{ context.imageDimensions.height }}"/></div>
+      <div class="block-header"><img src="{{ item.image }}" alt="Testimonial Image" class="block-image" width="{{ context.imageDimensions.width }}" height="{{ context.imageDimensions.height }}"/></div>
     {% elseif item.header == 'icon' %}
       <div class="block-header"><i class="icon icon-block"></i></div>
     {% endif %}

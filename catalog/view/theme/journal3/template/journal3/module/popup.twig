@@ -1,7 +1,7 @@
 {% if iframe %}
   {% if contentType == 'image' %}
     <div class="popup-content">
-      <img src="{{ image }}" alt="" width="{{ imageDimensions.width }}" height="{{ imageDimensions.height }}"/>
+      <img src="{{ image }}" alt="Popup Image" width="{{ imageDimensions.width }}" height="{{ imageDimensions.height }}"/>
     </div>
   {% elseif contentType == 'text' %}
     <div class="popup-content">
@@ -26,7 +26,7 @@
             <iframe src="index.php?route=journal3/popup/page&module_id={{ module_id }}&popup=module" width="100%" height="100%" frameborder="0" onload="this.height = this.contentWindow.document.querySelector('.site-wrapper').offsetHeight; $(this).prev('.journal-loading').hide();"></iframe>
           {% elseif contentType == 'image' %}
             <div class="popup-content">
-              <img src="{{ image }}" alt="" width="{{ imageDimensions.width }}" height="{{ imageDimensions.height }}"/>
+              <img src="{{ image }}" alt="Popup Image" width="{{ imageDimensions.width }}" height="{{ imageDimensions.height }}"/>
             </div>
           {% elseif contentType == 'text' %}
             <div class="popup-content">

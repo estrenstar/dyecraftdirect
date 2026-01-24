@@ -22,6 +22,50 @@ class Pagination {
 	public $text_prev = '&lt;';
 
 	/**
+     * Render pagination links for HTML head (rel="next", rel="prev")
+     *
+     * @return	text
+     */
+	public function getHeadLinks() {
+		$total = $this->total;
+
+		if ($this->page < 1) {
+			$page = 1;
+		} else {
+			$page = $this->page;
+		}
+
+		if (!(int)$this->limit) {
+			$limit = 10;
+		} else {
+			$limit = $this->limit;
+		}
+
+		$num_pages = ceil($total / $limit);
+		$this->url = str_replace('%7Bpage%7D', '{page}', $this->url);
+		
+		$output = '';
+		
+		// Add rel="prev" link
+		if ($page > 1) {
+			if ($page - 1 === 1) {
+				$prev_url = str_replace(array('&amp;page={page}', '?page={page}', '&page={page}'), '', $this->url);
+			} else {
+				$prev_url = str_replace('{page}', $page - 1, $this->url);
+			}
+			$output .= '<link rel="prev" href="' . htmlspecialchars($prev_url) . '" />' . "\n";
+		}
+		
+		// Add rel="next" link
+		if ($page < $num_pages) {
+			$next_url = str_replace('{page}', $page + 1, $this->url);
+			$output .= '<link rel="next" href="' . htmlspecialchars($next_url) . '" />' . "\n";
+		}
+		
+		return $output;
+	}
+
+	/**
      * 
      *
      * @return	text
