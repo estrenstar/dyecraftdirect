@@ -20,6 +20,10 @@ Options -Indexes
 # SEO URL Settings
 RewriteEngine On
 
+# Force HTTPS - All requests redirect to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
 # If your opencart installation does not run in the main web folder make sure the following is set to the folder it does run in, i.e. / becomes /shop/
 RewriteBase /
 
