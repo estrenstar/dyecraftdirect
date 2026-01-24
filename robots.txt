@@ -1,4 +1,5 @@
 User-agent: *
+# Block parameter-based pagination/sorting to prevent duplicate indexing
 Disallow: /*?sort=
 Disallow: /*&sort=
 Disallow: /*?order=
@@ -16,3 +17,16 @@ Disallow: /*?search=
 Disallow: /*&search=
 Disallow: /index.php?route=product/search
 Disallow: /search/
+
+# Block error pages and system paths
+Disallow: /*?route=error/
+Disallow: /error/
+Disallow: /tmp/
+Disallow: /system/
+Disallow: /admin/
+Disallow: /catalog/controller/
+Disallow: /catalog/model/
+Disallow: /catalog/view/
+
+# Sitemap
+Sitemap: https://dyecraftdirect.com/sitemap.xml
