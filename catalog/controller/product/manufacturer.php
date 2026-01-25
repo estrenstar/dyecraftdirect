@@ -315,6 +315,8 @@ class ControllerProductManufacturer extends Controller {
 				$this->document->addLink($this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id']), 'canonical');
 			} else {
 				$this->document->addLink($this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . '&page=' . $page), 'canonical');
+				// Add noindex for paginated manufacturer pages to prevent duplicate indexing
+				$this->document->addMeta('robots', array('content' => 'noindex,follow'));
 			}
 			
 			if ($page > 1) {

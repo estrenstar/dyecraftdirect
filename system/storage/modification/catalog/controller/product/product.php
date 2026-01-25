@@ -352,7 +352,7 @@ class ControllerProductProduct extends Controller {
 			
 			// Add robots meta tag to prevent indexing of product pages with extra parameters
 			// Only index clean product URLs to avoid duplicate content issues
-			if (isset($this->request->get['path']) || isset($this->request->get['filter']) || isset($this->request->get['manufacturer_id']) || isset($this->request->get['search']) || isset($this->request->get['tag'])) {
+			if (isset($this->request->get['path']) || isset($this->request->get['filter']) || isset($this->request->get['manufacturer_id']) || isset($this->request->get['search']) || isset($this->request->get['tag']) || isset($this->request->get['page'])) {
 				// This is a parameterized product URL - disindex it since canonical points to clean URL
 				$this->document->addMeta('robots', array('content' => 'noindex,follow'));
 			}

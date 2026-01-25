@@ -470,6 +470,8 @@ if (defined('JOURNAL3_ACTIVE')) {
 			    $this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id']), 'canonical');
 			} else {
 				$this->document->addLink($this->url->link('product/category', 'path=' . $category_info['category_id'] . '&page='. $page), 'canonical');
+				// Add noindex for paginated category pages to prevent duplicate indexing
+				$this->document->addMeta('robots', array('content' => 'noindex,follow'));
 			}
 			
 			if ($page > 1) {

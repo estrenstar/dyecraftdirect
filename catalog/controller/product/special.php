@@ -244,6 +244,8 @@ class ControllerProductSpecial extends Controller {
 		    $this->document->addLink($this->url->link('product/special', '', true), 'canonical');
 		} else {
 		    $this->document->addLink($this->url->link('product/special', 'page='. $page , true), 'canonical');
+		    // Add noindex for paginated special pages to prevent duplicate indexing
+		    $this->document->addMeta('robots', array('content' => 'noindex,follow'));
 		}		
 		
 		if ($page > 1) {
